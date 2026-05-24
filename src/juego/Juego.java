@@ -75,8 +75,18 @@ public class Juego extends InterfaceJuego
 
 	                if (enemigos[i] == null) {
 
-	                    enemigos[i] =
-	                        new AereoNormal(entorno.ancho());
+	                	if (Math.random() < 0.5) {
+
+	                	    //asi va de derecha a izquierda
+	                	    enemigos[i] =
+	                	        new AereoNormal(entorno.ancho(), -1);
+
+	                	} else {
+
+	                	    //asi va de izquierda a derecha
+	                	    enemigos[i] =
+	                	        new AereoNormal(0, 1);
+	                	}
 
 	                    break;
 	                }
@@ -95,8 +105,16 @@ public class Juego extends InterfaceJuego
 
 	                if (enemigosRapidos[i] == null) {
 
-	                    enemigosRapidos[i] =
-	                        new AereoRapido(entorno.ancho());
+	                	if (Math.random() < 0.5) {
+
+	                	    enemigosRapidos[i] =
+	                	        new AereoRapido(entorno.ancho(), -1);
+
+	                	} else {
+
+	                	    enemigosRapidos[i] =
+	                	        new AereoRapido(0, 1);
+	                	}
 
 	                    break;
 	                }

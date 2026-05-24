@@ -7,24 +7,27 @@ public class AereoRapido {
 
     private double x;
     private double y;
-
     private double velocidad;
-
-    public AereoRapido(double xInicial) {
+    private int direccion;
+    
+    public AereoRapido(double xInicial, int direccionInicial) {
 
         this.x = xInicial;
 
         // con esto ajusto la altura aleatoria entre 0 y 400
         this.y = Math.random() * 500;
 
-        this.velocidad = 1;
+        this.velocidad = 3;
+        
+        this.direccion = direccionInicial;
+        
     }
 
     // movimento
 
     public void mover() {
 
-        this.x -= this.velocidad;
+    	this.x += this.velocidad * this.direccion;
     }
 
     // dibujar
@@ -45,7 +48,7 @@ public class AereoRapido {
 
     public boolean fueraDePantalla() {
 
-        return this.x < 0;
+        return this.x < 0 || this.x > 800;
     }
 
     // getters

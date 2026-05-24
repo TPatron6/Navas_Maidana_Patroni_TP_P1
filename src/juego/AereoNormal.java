@@ -7,10 +7,10 @@ public class AereoNormal {
 
     private double x;
     private double y;
-
     private double velocidad;
+    private int direccion;
 
-    public AereoNormal(double xInicial) {
+    public AereoNormal(double xInicial, int direccionInicial) {
 
         this.x = xInicial;
 
@@ -18,13 +18,15 @@ public class AereoNormal {
         this.y = Math.random() * 500;
 
         this.velocidad = 1;
+        
+        this.direccion = direccionInicial;
     }
 
     // movimento
 
     public void mover() {
 
-        this.x -= this.velocidad;
+    	this.x += this.velocidad * this.direccion;
     }
 
     // dibujar
@@ -45,7 +47,7 @@ public class AereoNormal {
 
     public boolean fueraDePantalla() {
 
-        return this.x < 0;
+        return this.x < 0 || this.x > 800;
     }
 
     // getters
