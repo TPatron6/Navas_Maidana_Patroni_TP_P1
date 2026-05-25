@@ -17,7 +17,7 @@ public class AereoRapido {
         // con esto ajusto la altura aleatoria entre 0 y 400
         this.y = Math.random() * 500;
 
-        this.velocidad = 3;
+        this.velocidad = 4;
         
         this.direccion = direccionInicial;
         
