@@ -1,50 +1,42 @@
 package juego;
 
-import java.awt.Color;
+import java.awt.*;
 
 import entorno.Entorno;
 
 public class Islas {
-
-    private int x;
-    private int y;
-
-    private int ancho;
-    private int alto;
+	
+	private Rectangle area;
+   
 
     public Islas(int x, int y, int ancho, int alto) {
-
-        this.x = x; 
-        this.y = y;
-
-        this.ancho = ancho;
-        this.alto = alto;
+    	this.area = new Rectangle(x, y, ancho, alto);
     }
 
     public void dibujar(Entorno entorno, int camaraX) {
 
         entorno.dibujarRectangulo(
-                x - camaraX,
-                y,
-                ancho,
-                alto,
+                area.x - camaraX,
+                area.y,
+                area.width,
+                area.height,
                 0,
                 Color.GREEN);
     }
 
     public int getX() {
-        return x;
+        return area.x;
     }
 
     public int getY() {
-        return y;
+        return area.y;
     }
 
     public int getAncho() {
-        return ancho;
+        return area.width;
     }
 
     public int getAlto() {
-        return alto;
+        return area.height;
     }
 }
