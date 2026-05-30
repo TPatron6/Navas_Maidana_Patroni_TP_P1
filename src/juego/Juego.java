@@ -1,7 +1,7 @@
 package juego;
 
 
-import java.awt.Color;
+import java.awt.*;
 import java.util.Random;
 
 import entorno.Entorno;
@@ -32,9 +32,6 @@ public class Juego extends InterfaceJuego
 	//GRAVEDAD
 	private void gravedad(Princesa princesa) {
 		int gravedad = princesa.getVelocidadY() + 1;
-		if(gravedad > 15) {
-			gravedad = 15;
-		}
 		princesa.setVelocidadY(gravedad);
 		princesa.aumentarVelocidad(gravedad);
 	}
@@ -46,6 +43,7 @@ public class Juego extends InterfaceJuego
 		
 		// Inicializar lo que haga falta para el juego
 		// ...
+		
 		this.enemigos = new AereoNormal[20];
 		this.enemigosRapidos = new AereoRapido[20];
 		
@@ -254,13 +252,15 @@ public class Juego extends InterfaceJuego
 	    }
 	 // MOVIMIENTO JUGADOR SOBRE EJE X
 
-	    this.princesa.moverLateralmente(entorno);
-
+	    this.princesa.moverLateralmente(entorno);      
+	   
+       	
       
      // MOVIMIENTO JUGADOR SOBRE EJE Y 
-        
-	    this.princesa.saltar(entorno);
-
+	    
+	    if(this.princesa.getTotalSaltos() < 2) {
+	    	this.princesa.saltar(entorno);
+	    }
         
      // GRAVEDAD
         
@@ -278,12 +278,69 @@ public class Juego extends InterfaceJuego
         
      // COLISIONES CON ISLAS
         
+       	int izqPrincesa;
+       	int derPrincesa;
+       	int abajoPrincesa;
+      	boolean enIsla = false;
+    	int arribaPrincesa = this.princesa.getY() - 20;
+       	boolean debajoIsla = false;
+       	boolean toco = false;
+       	
+         
+     	//COLISION CON BORDE LATERAL DE ISLA
+      	for(int i=0; i < niveles.length; i++ ) {
+        		
+      		if(this.princesa.getY() - 20 <= niveles[i] + 12 && this.princesa.getY() + 20 >= niveles[i] - 12) {
+	       		int k = 0;
+	        		
+	       		while(!toco && k< islas[i].length && islas[i][k] != null) {
+	        		
+	        		int izqIsla = islas[i][k].getX() - islas[i][k].getAncho() / 2;
+	        		int derIsla = islas[i][k].getX() + islas[i][k].getAncho() / 2;
+	        		  
+		        	izqPrincesa = this.princesa.getX() - this.princesa.getAncho() /2;
+		        	derPrincesa = this.princesa.getX() + this.princesa.getAncho() /2;
+	        		if(princesa.getVelocidadX() > 0 && derPrincesa <= izqIsla && derPrincesa + princesa.getVelocidadX() >= izqIsla ) {
+	        			toco = true;
+	        			princesa.setVelocidadY(3);
+	        			princesa.setVelocidadX(0);
+		        			
+	        			int nuevaAltura = izqIsla - 10; //MITAD DEL ANCHO DEL PERSONAJE
+	        			princesa.setX(nuevaAltura);
+	        			
+	          		}
+	        		if(princesa.getVelocidadX() < 0 && izqPrincesa >= derIsla && izqPrincesa + princesa.getVelocidadX() <= derIsla ) {
+	        			toco = true;
+	        			princesa.setVelocidadY(3);
+		        		princesa.setVelocidadX(0);
+		        		
+	        			int nuevaAltura = derIsla + 10; //MITAD DEL ANCHO DEL PERSONAJE
+	        			princesa.setX(nuevaAltura);
+	        			
+	          		}
+	        	
+	        		k++;
+	       		}	
+	       	}
+	       	if(toco) {
+	       		break;
+	       	}
+       	}
+       	
+       	if(!toco) {
+       		int nuevoX = princesa.getX() + princesa.getVelocidadX();
+       		princesa.setX(nuevoX);
+       	}
+       	
+       	izqPrincesa = this.princesa.getX() - 8;
+       	derPrincesa = this.princesa.getX() + 8;
+       	abajoPrincesa = this.princesa.getY() + 20;
+      	enIsla = false;
+    	arribaPrincesa = this.princesa.getY() - 20;
+       	debajoIsla = false;
+     	
         
-       	int abajoPrincesa = this.princesa.getY() + 20;
-       	int izqPrincesa = this.princesa.getX() - 10;
-       	int derPrincesa = this.princesa.getX() + 10;
-       	boolean enIsla = false;
-        	
+       	//COLISION CON BORDE SUPERIOR DE ISLA
        	for(int i=0; i < niveles.length; i++ ) {
         		
 	       	if(princesa.getVelocidadY() >= 0 && abajoPrincesa >= niveles[i]-10 && (abajoPrincesa - this.princesa.getVelocidadY()) <= niveles[i]-10) { //NIVELES TIENE LAS COORDENADAS Y DE LAS ISLAS
@@ -300,17 +357,49 @@ public class Juego extends InterfaceJuego
 		        			
 	        			int nuevaAltura = islas[i][k].getY() - 30; //MITAD DEL ALTO DEL PERSONAJE + MITAD DEL ALTO DE LA ISLA
 	        			this.princesa.setY(nuevaAltura);
+	        			this.princesa.setTotalSaltos(0);
 	          		}
-		        		
+	        	
 	        		k++;
 	       		}	
 	       	}
 	       	if(enIsla) {
 	       		break;
 	       	}
+	       
        	}
-      
-        
+       	
+       	//COLISION CON EL BORDE INFERIOR DE LA ISLA
+  
+       	
+       	for(int i=0 ; i < islas.length; i++ ) {
+    		
+	       	if(princesa.getVelocidadY() < 0 && arribaPrincesa <= niveles[i]+10 && (arribaPrincesa - this.princesa.getVelocidadY()) >= niveles[i]+10) { //NIVELES TIENE LAS COORDENADAS Y DE LAS ISLAS
+	       		int k = 0;
+	       		        		
+	       		while(!debajoIsla && k< islas[i].length && islas[i][k] != null) {
+	        		
+	        		int izqIsla = islas[i][k].getX() - islas[i][k].getAncho() / 2;
+	        		int derIsla = islas[i][k].getX() + islas[i][k].getAncho() / 2;
+	  
+		        			
+	        		if(izqPrincesa <= derIsla && derPrincesa >= izqIsla) {
+	        			debajoIsla = true;
+	        			this.princesa.setVelocidadY(0);
+		        			
+	        			int nuevaAltura = islas[i][k].getY() + 30; //MITAD DEL ALTO DEL PERSONAJE + MITAD DEL ALTO DE LA ISLA
+	        			this.princesa.setY(nuevaAltura);
+	        	     
+	          		}
+		        		
+	        		k++;
+	       		}	
+	       	}
+	       	if(debajoIsla) {
+	       		break;
+	       	}
+       	}
+ 
         // CAMARA QUE SIGUE
         
 
