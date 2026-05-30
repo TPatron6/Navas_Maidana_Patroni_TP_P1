@@ -34,15 +34,19 @@ public class Princesa {
 	public void saltar(Entorno entorno) {
 
 		if(entorno.sePresiono(entorno.TECLA_ESPACIO)) {
-			this.velocidadY = -15;
-			this.totalSaltos ++;
-
-
-		if(entorno.sePresiono(entorno.TECLA_ARRIBA)) {
+			if(this.totalSaltos == 1){
+				this.velocidadY = -9;
+				this.totalSaltos ++;
+			}
+			else {
+				this.velocidadY = -12;
+				this.totalSaltos ++;
+			}
+		}
+		/*if(entorno.sePresiono(entorno.TECLA_ARRIBA)) {
 			this.velocidadY -= 20;
 
-		}
-		}
+		}*/
 	}
 
 	public int getTotalSaltos() {

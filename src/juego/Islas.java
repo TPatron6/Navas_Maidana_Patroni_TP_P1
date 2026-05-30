@@ -13,10 +13,10 @@ public class Islas {
     	this.area = new Rectangle(x, y, ancho, alto);
     }
 
-    public void dibujar(Entorno entorno, int camaraX) {
+    public void dibujar(Entorno entorno, int x) {
 
         entorno.dibujarRectangulo(
-                area.x - camaraX,
+                x,
                 area.y,
                 area.width,
                 area.height,
