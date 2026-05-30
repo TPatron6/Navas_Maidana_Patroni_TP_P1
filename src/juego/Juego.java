@@ -18,7 +18,8 @@ public class Juego extends InterfaceJuego
 	
 	//JUGADOR
 	private Princesa princesa;
-
+	//VIDAS
+	private vidas vidas;
 	//Camara
 	private int camaraX;
 	    
@@ -50,7 +51,8 @@ public class Juego extends InterfaceJuego
 		
         // posicion inicial jugador
 		this.princesa = new Princesa();
-      
+		// vidas
+		this.vidas = new vidas(3);
         // cámara
         this.camaraX = 0;
 
@@ -148,6 +150,16 @@ public class Juego extends InterfaceJuego
 	 * (ver el enunciado del TP para mayor detalle).
 	 */
 	public void tick() {
+		if (vidas.getCantidad() <= 0) {
+
+		    entorno.escribirTexto(
+		        "GAME OVER",
+		        330,
+		        300
+		    );
+
+		    return;
+		}
 
 	    //GENERAR NORMALES
 
@@ -253,7 +265,16 @@ public class Juego extends InterfaceJuego
      // GRAVEDAD
         
 	 	this.gravedad(princesa);
-	    
+	 // PERDER VIDA SI CAE
+
+	 	if (this.princesa.getY() > 700) {
+
+	 	    vidas.perderVida();
+
+	 	    this.princesa = new Princesa();
+
+	 	    camaraX = 0;
+	 	}
         
      // COLISIONES CON ISLAS
         
@@ -315,6 +336,11 @@ public class Juego extends InterfaceJuego
         // DIBUJAR JUGADOR
        
         this.princesa.dibujarPrincesa(entorno, camaraX);
+        entorno.escribirTexto(
+        	    "Vidas: " + vidas.getCantidad(),
+        	    20,
+        	    30
+        	);
     }
 	
 	
