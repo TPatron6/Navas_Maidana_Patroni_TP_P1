@@ -25,8 +25,8 @@ public class Princesa {
 	}
 		
 	public void saltar(Entorno entorno) {
-		if(entorno.sePresiono(entorno.TECLA_ESPACIO)) {
-			this.velocidadY -= 15;
+		if(entorno.sePresiono(entorno.TECLA_ARRIBA)) {
+			this.velocidadY -= 20;
 		}
 	}
 
