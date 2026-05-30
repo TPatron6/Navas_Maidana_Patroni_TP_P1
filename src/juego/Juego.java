@@ -270,7 +270,7 @@ public class Juego extends InterfaceJuego
      // GRAVEDAD
         
 	 	this.gravedad(princesa);
-<<<<<<< HEAD
+
 	 // PERDER VIDA SI CAE
 
 	 	if (this.princesa.getY() > 700) {
@@ -281,10 +281,7 @@ public class Juego extends InterfaceJuego
 
 	 	    camaraX = 0;
 	 	}
-=======
-	 	
-	    
->>>>>>> cambioTPat
+
         
      // COLISIONES CON ISLAS
         
@@ -435,14 +432,14 @@ public class Juego extends InterfaceJuego
         // DIBUJAR JUGADOR
        
         this.princesa.dibujarPrincesa(entorno, camaraX);
-<<<<<<< HEAD
+
         entorno.escribirTexto(
         	    "Vidas: " + vidas.getCantidad(),
         	    20,
         	    30
         	);
-    }
-=======
+    
+
     
 	
 		//CREAR EL PREYOCTIL
@@ -463,7 +460,7 @@ public class Juego extends InterfaceJuego
 		    }
 		}
 	}
->>>>>>> cambioTPat
+
 	
 	
 	

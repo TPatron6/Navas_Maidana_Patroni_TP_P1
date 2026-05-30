@@ -32,16 +32,16 @@ public class Princesa {
 	}
 		
 	public void saltar(Entorno entorno) {
-<<<<<<< HEAD
+
 		if(entorno.sePresiono(entorno.TECLA_ESPACIO)) {
 			this.velocidadY = -15;
 			this.totalSaltos ++;
-=======
+
 
 		if(entorno.sePresiono(entorno.TECLA_ARRIBA)) {
 			this.velocidadY -= 20;
 
->>>>>>> cambioTPat
+		}
 		}
 	}
 
