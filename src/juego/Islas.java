@@ -41,6 +41,10 @@ public class Islas {
     }
     
     public Rectangle getArea() {
-    	return area;
+
+        return this.area;
     }
 }
+
+
+

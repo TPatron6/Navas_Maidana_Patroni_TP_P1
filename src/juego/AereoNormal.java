@@ -14,14 +14,36 @@ public class AereoNormal {
 
         this.x = xInicial;
 
-        // con esto ajusto la altura aleatoria entre 0 y 400
-        this.y = Math.random() * 500;
+        // con esto ajusto la altura aleatoria entre 0 y 400 (evitando entrar en conflicto con la generacion de islas)
+        this.y = generarAltura();
 
         this.velocidad = 1;
         
         this.direccion = direccionInicial;
     }
 
+    
+    private double generarAltura() {
+
+        double[] alturasValidas = {
+
+            
+        		70,
+                160,
+                340,
+                440,
+            
+            
+
+        };
+
+        int indice =
+            (int)(Math.random() * alturasValidas.length);
+
+        return alturasValidas[indice];
+    }
+    
+    
     // movimento
 
     public void mover() {

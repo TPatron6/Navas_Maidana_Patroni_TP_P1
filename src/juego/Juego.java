@@ -7,6 +7,7 @@ import java.util.Random;
 import entorno.Entorno;
 import entorno.InterfaceJuego;
 
+
 public class Juego extends InterfaceJuego
 {
 	// El objeto Entorno que controla el tiempo y otros
@@ -22,6 +23,9 @@ public class Juego extends InterfaceJuego
 	private vidas vidas;
 	//Camara
 	private int camaraX;
+	
+	//Proyectil
+    private Proyectil proyectil;
 	    
 	//Islas 
 	private Islas[][] islas; //[] lo converti en matriz
@@ -53,6 +57,8 @@ public class Juego extends InterfaceJuego
 		this.vidas = new vidas(3);
         // cámara
         this.camaraX = 0;
+        
+        
 
      
         // ISLAS RANDOM
@@ -139,8 +145,7 @@ public class Juego extends InterfaceJuego
 
 		    return cantidad;
 		}
-
-	
+		
 	/**
 	 * Durante el juego, el método tick() será ejecutado en cada instante y 
 	 * por lo tanto es el método más importante de esta clase. Aquí se debe 
@@ -265,6 +270,7 @@ public class Juego extends InterfaceJuego
      // GRAVEDAD
         
 	 	this.gravedad(princesa);
+<<<<<<< HEAD
 	 // PERDER VIDA SI CAE
 
 	 	if (this.princesa.getY() > 700) {
@@ -275,6 +281,10 @@ public class Juego extends InterfaceJuego
 
 	 	    camaraX = 0;
 	 	}
+=======
+	 	
+	    
+>>>>>>> cambioTPat
         
      // COLISIONES CON ISLAS
         
@@ -425,12 +435,35 @@ public class Juego extends InterfaceJuego
         // DIBUJAR JUGADOR
        
         this.princesa.dibujarPrincesa(entorno, camaraX);
+<<<<<<< HEAD
         entorno.escribirTexto(
         	    "Vidas: " + vidas.getCantidad(),
         	    20,
         	    30
         	);
     }
+=======
+    
+	
+		//CREAR EL PREYOCTIL
+		if (entorno.sePresionoBoton(entorno.BOTON_IZQUIERDO) && proyectil == null) {
+	
+			    proyectil = new Proyectil(princesa.getX(), princesa.getY(), entorno.mouseX() + camaraX, entorno.mouseY());
+			}
+	
+		if (proyectil != null) {
+
+		    proyectil.mover();
+
+		    proyectil.dibujar(entorno, camaraX);
+
+		    if (proyectil.fueraDePantalla(camaraX)) {
+
+		        proyectil = null;
+		    }
+		}
+	}
+>>>>>>> cambioTPat
 	
 	
 	
