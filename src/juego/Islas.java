@@ -39,4 +39,8 @@ public class Islas {
     public int getAlto() {
         return area.height;
     }
+    
+    public Rectangle getArea() {
+    	return area;
+    }
 }
