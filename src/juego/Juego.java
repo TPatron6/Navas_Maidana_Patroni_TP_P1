@@ -31,9 +31,6 @@ public class Juego extends InterfaceJuego
 	//GRAVEDAD
 	private void gravedad(Princesa princesa) {
 		int gravedad = princesa.getVelocidadY() + 1;
-//		if(gravedad > 15) {
-//			gravedad = 15;
-//		}
 		princesa.setVelocidadY(gravedad);
 		princesa.aumentarVelocidad(gravedad);
 	}
@@ -45,6 +42,7 @@ public class Juego extends InterfaceJuego
 		
 		// Inicializar lo que haga falta para el juego
 		// ...
+		
 		this.enemigos = new AereoNormal[20];
 		this.enemigosRapidos = new AereoRapido[20];
 		
@@ -247,9 +245,10 @@ public class Juego extends InterfaceJuego
        	
       
      // MOVIMIENTO JUGADOR SOBRE EJE Y 
-        
-	    this.princesa.saltar(entorno);
-
+	    
+	    if(this.princesa.getTotalSaltos() < 2) {
+	    	this.princesa.saltar(entorno);
+	    }
         
      // GRAVEDAD
         
@@ -270,7 +269,7 @@ public class Juego extends InterfaceJuego
      	//COLISION CON BORDE LATERAL DE ISLA
       	for(int i=0; i < niveles.length; i++ ) {
         		
-      		if(this.princesa.getY() - 20 <= niveles[i] + 10 && this.princesa.getY() + 20 >= niveles[i] - 10) {
+      		if(this.princesa.getY() - 20 <= niveles[i] + 12 && this.princesa.getY() + 20 >= niveles[i] - 12) {
 	       		int k = 0;
 	        		
 	       		while(!toco && k< islas[i].length && islas[i][k] != null) {
@@ -312,8 +311,8 @@ public class Juego extends InterfaceJuego
        		princesa.setX(nuevoX);
        	}
        	
-       	izqPrincesa = this.princesa.getX() - 10;
-       	derPrincesa = this.princesa.getX() + 10;
+       	izqPrincesa = this.princesa.getX() - 8;
+       	derPrincesa = this.princesa.getX() + 8;
        	abajoPrincesa = this.princesa.getY() + 20;
       	enIsla = false;
     	arribaPrincesa = this.princesa.getY() - 20;
@@ -337,7 +336,7 @@ public class Juego extends InterfaceJuego
 		        			
 	        			int nuevaAltura = islas[i][k].getY() - 30; //MITAD DEL ALTO DEL PERSONAJE + MITAD DEL ALTO DE LA ISLA
 	        			this.princesa.setY(nuevaAltura);
-	        			
+	        			this.princesa.setTotalSaltos(0);
 	          		}
 	        	
 	        		k++;

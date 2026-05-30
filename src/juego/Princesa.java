@@ -9,21 +9,21 @@ public class Princesa {
 	private int velocidadY;
 	private int velocidadX;
 	private double angulo;
+	private int totalSaltos;
 	
 	public Princesa() {
 		this.area = new Rectangle(400, 300, 20, 40);
 		this.velocidadY = 0;
 		this.angulo = 0;
+		this.totalSaltos = 0;
 	}
 	
 	public void moverLateralmente(Entorno entorno) {
 		 if(entorno.estaPresionada(entorno.TECLA_DERECHA)){
 			  this.velocidadX = 4;
-			 //this.area.x += 4;
-		 }
+		}
 		 else if(entorno.estaPresionada(entorno.TECLA_IZQUIERDA)) {
 			  this.velocidadX = -4;
-			  //this.area.x -=4;
 		 }
 		 else {
 			 this.velocidadX = 0;
@@ -33,8 +33,17 @@ public class Princesa {
 		
 	public void saltar(Entorno entorno) {
 		if(entorno.sePresiono(entorno.TECLA_ESPACIO)) {
-			this.velocidadY = -12;
+			this.velocidadY = -15;
+			this.totalSaltos ++;
 		}
+	}
+
+	public int getTotalSaltos() {
+		return totalSaltos;
+	}
+
+	public void setTotalSaltos(int totalSaltos) {
+		this.totalSaltos = totalSaltos;
 	}
 
 	public void setVelocidadY(int velocidadY) {
