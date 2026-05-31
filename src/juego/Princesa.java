@@ -35,11 +35,12 @@ public class Princesa {
 
 		if(entorno.sePresiono(entorno.TECLA_ESPACIO)) {
 			if(this.totalSaltos == 1){
-				this.velocidadY = -9;
+				this.velocidadY = -12;
 				this.totalSaltos ++;
 			}
 			else {
 				this.velocidadY = -14;
+
 				this.totalSaltos ++;
 			}
 		}

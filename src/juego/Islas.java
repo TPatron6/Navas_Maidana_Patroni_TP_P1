@@ -7,21 +7,30 @@ import entorno.Entorno;
 public class Islas {
 	
 	private Rectangle area;
+	private boolean esRompible;
    
 
-    public Islas(int x, int y, int ancho, int alto) {
+    public Islas(int x, int y, int ancho, int alto, boolean esRompible) {
     	this.area = new Rectangle(x, y, ancho, alto);
+    	this.esRompible = esRompible;
     }
 
-    public void dibujar(Entorno entorno, int x) {
+    public boolean isEsRompible() {
+		return esRompible;
+	}
 
+	public void dibujar(Entorno entorno, int x) {
+    	Color color = Color.GREEN;
+    	if(this.esRompible) {
+    		color = Color.ORANGE;
+    	}
         entorno.dibujarRectangulo(
                 x,
                 area.y,
                 area.width,
                 area.height,
                 0,
-                Color.GREEN);
+                color);
     }
 
     public int getX() {
