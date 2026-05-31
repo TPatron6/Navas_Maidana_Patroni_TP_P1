@@ -39,7 +39,7 @@ public class Princesa {
 				this.totalSaltos ++;
 			}
 			else {
-				this.velocidadY = -12;
+				this.velocidadY = -14;
 				this.totalSaltos ++;
 			}
 		}

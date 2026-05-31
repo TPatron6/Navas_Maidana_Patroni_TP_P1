@@ -17,6 +17,8 @@ public class Juego extends InterfaceJuego
 	private AereoNormal[] enemigos;
 	private AereoRapido[] enemigosRapidos;
 	
+	private EnemigoTerrestre[] enemigosTerrestres;
+	
 	//JUGADOR
 	private Princesa princesa;
 	//VIDAS
@@ -48,6 +50,8 @@ public class Juego extends InterfaceJuego
 		
 		this.enemigos = new AereoNormal[20];
 		this.enemigosRapidos = new AereoRapido[20];
+		
+		this.enemigosTerrestres = new EnemigoTerrestre[20];
 		
         // posicion inicial jugador
 		this.princesa = new Princesa();
@@ -112,6 +116,69 @@ public class Juego extends InterfaceJuego
         	
         }
         
+        int indiceEnemigo = 0;
+
+        for(int i = 0;
+            i < islas[0].length
+            && indiceEnemigo < enemigosTerrestres.length;
+            i++) {
+
+            if(islas[0][i] == null) {
+                continue;
+            }
+
+            boolean inicioDeIsla = false;
+
+            if(i == 0) {
+                inicioDeIsla = true;
+            }
+            else if(islas[0][i - 1] == null) {
+                inicioDeIsla = true;
+            }
+            else {
+
+                int distancia =
+                    islas[0][i].getX()
+                    - islas[0][i - 1].getX();
+
+                if(distancia > 40) {
+                    inicioDeIsla = true;
+                }
+            }
+
+            if(inicioDeIsla) {
+
+                int ultimoBloque = i;
+
+                while(
+                    ultimoBloque + 1 < islas[0].length
+                    && islas[0][ultimoBloque + 1] != null
+                    && islas[0][ultimoBloque + 1].getX()
+                       - islas[0][ultimoBloque].getX() == 40
+                ) {
+                    ultimoBloque++;
+                }
+
+                int limiteIzquierdo =
+                    islas[0][i].getX()
+                    - islas[0][i].getAncho()/2;
+
+                int limiteDerecho =
+                    islas[0][ultimoBloque].getX()
+                    + islas[0][ultimoBloque].getAncho()/2;
+
+                enemigosTerrestres[indiceEnemigo] =
+                    new EnemigoTerrestre(
+                        islas[0][i].getX(),
+                        niveles[0] - 15 - 10,
+                        limiteIzquierdo,
+                        limiteDerecho
+                    );
+
+                indiceEnemigo++;
+            }
+        }
+        
 	        
 		// Inicia el juego!
 		this.entorno.iniciar();
@@ -140,6 +207,43 @@ public class Juego extends InterfaceJuego
 		    }
 
 		    return cantidad;
+		}
+		
+		public void generarEnemigoTerrestre() {
+
+		    int cantidadIslas = 0;
+
+		    while (cantidadIslas < islas[0].length
+		            && islas[0][cantidadIslas] != null) {
+
+		        cantidadIslas++;
+		    }
+
+		    if (cantidadIslas == 0) {
+		        return;
+		    }
+
+		    int indiceIsla =
+		        (int)(Math.random() * cantidadIslas);
+
+		    Islas isla = islas[0][indiceIsla];
+
+		    int x = isla.getX();
+
+		    int y = isla.getY() - 30;
+
+		    for (int i = 0;
+		         i < enemigosTerrestres.length;
+		         i++) {
+
+		        if (enemigosTerrestres[i] == null) {
+
+		            enemigosTerrestres[i] =
+		                new EnemigoTerrestre(x, y, i, i);
+
+		            break;
+		        }
+		    }
 		}
 		
 	/**
@@ -251,6 +355,33 @@ public class Juego extends InterfaceJuego
 	            }
 	        }
 	    }
+	    
+	    
+	    
+	    for (int i = 0;
+	    	     i < enemigosTerrestres.length;
+	    	     i++) {
+
+	    	    if (enemigosTerrestres[i] != null) {
+
+	    	        enemigosTerrestres[i].mover();
+
+	    	        enemigosTerrestres[i].gravedad();
+	    	        
+	    	        int pisoEnemigo = niveles[0] - 15 - 10;
+
+	    	        if (enemigosTerrestres[i].getY() > pisoEnemigo) {
+
+	    	            enemigosTerrestres[i].setY(pisoEnemigo);
+	    	            enemigosTerrestres[i].setVelocidadY(0);
+	    	        }
+
+	    	        enemigosTerrestres[i].dibujar(
+	    	            entorno,
+	    	            camaraX
+	    	        );
+	    	    }
+	    	}
 	    
 	 // MOVIMIENTO JUGADOR SOBRE EJE X
 

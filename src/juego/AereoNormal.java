@@ -29,9 +29,9 @@ public class AereoNormal {
 
             
         		70,
-                160,
-                340,
-                440,
+                230,
+                370,
+                470,
             
             
 
