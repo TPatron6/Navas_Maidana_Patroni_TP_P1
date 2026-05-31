@@ -39,14 +39,10 @@ public class Princesa {
 				this.totalSaltos ++;
 			}
 			else {
-				this.velocidadY = -9;
+				this.velocidadY = -10;
 				this.totalSaltos ++;
 			}
 		}
-		/*if(entorno.sePresiono(entorno.TECLA_ARRIBA)) {
-			this.velocidadY -= 20;
-
-		}*/
 	}
 
 	public int getTotalSaltos() {
