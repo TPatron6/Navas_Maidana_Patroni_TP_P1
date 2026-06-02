@@ -278,6 +278,7 @@ public class Juego extends InterfaceJuego
 	public void tick() {
 		if (vidas.getCantidad() <= 0) {
 
+<<<<<<< HEAD
 		    entorno.escribirTexto("GAME OVER", 330, 300);
 
 		    juegoIniciado = false;
@@ -324,6 +325,21 @@ public class Juego extends InterfaceJuego
 
 			  
 		    //GENERAR NORMALES
+=======
+		    entorno.escribirTexto(
+		        "GAME OVER",
+		        330,
+		        300
+		    );
+
+		    return;
+		}
+
+	    //GENERAR NORMALES
+
+	    if (entorno.tiempo() > 3000
+	        && contarEnemigos() < 10) {
+>>>>>>> 75417c7fefe55208623cc5a2e900eda643db7a41
 
 	        if (entorno.numeroDeTick() % 100 == 0) {
 
@@ -641,8 +657,12 @@ public class Juego extends InterfaceJuego
 	 	    vidas.perderVida();
 
 	 	    this.princesa = new Princesa();
+<<<<<<< HEAD
 	 	   this.princesa.setX(400);
 	 	   this.princesa.setY(300);
+=======
+
+>>>>>>> 75417c7fefe55208623cc5a2e900eda643db7a41
 	 	    camaraX = 0;
 	 	}
 	    
