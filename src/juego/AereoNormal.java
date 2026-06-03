@@ -1,21 +1,25 @@
 package juego;
 
 import java.awt.Color;
+import java.awt.Rectangle;
+
 import entorno.Entorno;
 
 public class AereoNormal {
 
-    private double x;
-    private double y;
-    private double velocidad;
+	private Rectangle area;
+  //  private double x;
+  // private double y;
+    private int velocidad;
     private int direccion;
 
-    public AereoNormal(double xInicial, int direccionInicial) {
-
-        this.x = xInicial;
+    public AereoNormal(int xInicial, int direccionInicial) {
+    	
+    	this.area= new Rectangle (xInicial, generarAltura(), 20, 20);
+    	//this.x = xInicial;
 
         // con esto ajusto la altura aleatoria entre 0 y 400 (evitando entrar en conflicto con la generacion de islas)
-        this.y = generarAltura();
+        //this.y = generarAltura();
 
         this.velocidad = 1;
         
@@ -23,9 +27,9 @@ public class AereoNormal {
     }
 
     
-    private double generarAltura() {
+    private int generarAltura() {
 
-        double[] alturasValidas = {
+        int[] alturasValidas = {
 
             
         		70,
@@ -48,7 +52,8 @@ public class AereoNormal {
 
     public void mover() {
 
-    	this.x += this.velocidad * this.direccion;
+    	//this.x += this.velocidad * this.direccion;
+    	this.area.x += this.velocidad * this.direccion;
     }
 
     // dibujar
@@ -56,8 +61,8 @@ public class AereoNormal {
     public void dibujar(Entorno entorno) {
 
         entorno.dibujarRectangulo(
-            this.x,
-            this.y,
+            this.area.x,
+            this.area.y,
             20,
             20,
             0,
@@ -69,16 +74,20 @@ public class AereoNormal {
 
     public boolean fueraDePantalla() {
 
-        return this.x < 0 || this.x > 800;
+        return this.area.x < 0 || this.area.x > 800;
     }
 
     // getters
 
-    public double getX() {
-        return this.x;
+    public int getX() {
+        return area.x;
     }
 
-    public double getY() {
-        return this.y;
+    public int getY() {
+        return area.y;
+    }
+    
+    public Rectangle getArea() {
+    	return area;
     }
 }

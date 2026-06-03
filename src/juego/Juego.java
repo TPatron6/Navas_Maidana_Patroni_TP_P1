@@ -278,7 +278,7 @@ public class Juego extends InterfaceJuego
 	public void tick() {
 		if (vidas.getCantidad() <= 0) {
 
-<<<<<<< HEAD
+
 		    entorno.escribirTexto("GAME OVER", 330, 300);
 
 		    juegoIniciado = false;
@@ -297,15 +297,15 @@ public class Juego extends InterfaceJuego
 	    	  
 
 		    // Título
-		    entorno.escribirTexto("PRINCESA AVENTURA", 300, 150);
+		    entorno.escribirTexto("PRINCESA AVENTURA", 320, 150);
 
 		    // Botón iniciar
 		    
-		    entorno.escribirTexto("ENTER = INICIAR", 330, 255);
+		    entorno.escribirTexto("ENTER = INICIAR", 320, 255);
 
 		    // Botón salir
 		   
-		    entorno.escribirTexto("ESC = SALIR", 340, 355);
+		    entorno.escribirTexto("ESC = SALIR", 320, 355);
 
 		    if (entorno.sePresiono(entorno.TECLA_ENTER)) {
 		        juegoIniciado = true;
@@ -325,7 +325,7 @@ public class Juego extends InterfaceJuego
 
 			  
 		    //GENERAR NORMALES
-=======
+
 		    entorno.escribirTexto(
 		        "GAME OVER",
 		        330,
@@ -339,7 +339,7 @@ public class Juego extends InterfaceJuego
 
 	    if (entorno.tiempo() > 3000
 	        && contarEnemigos() < 10) {
->>>>>>> 75417c7fefe55208623cc5a2e900eda643db7a41
+
 
 	        if (entorno.numeroDeTick() % 100 == 0) {
 
@@ -657,12 +657,11 @@ public class Juego extends InterfaceJuego
 	 	    vidas.perderVida();
 
 	 	    this.princesa = new Princesa();
-<<<<<<< HEAD
+
 	 	   this.princesa.setX(400);
 	 	   this.princesa.setY(300);
-=======
 
->>>>>>> 75417c7fefe55208623cc5a2e900eda643db7a41
+
 	 	    camaraX = 0;
 	 	}
 	    
@@ -722,7 +721,14 @@ public class Juego extends InterfaceJuego
 		        proyectil = null;
 		    }
 		}
+		
+		//for(Rectangle enemigo : enemigos) {
+			
+		//}
 	}
+	
+	
+		
 
 	
 	
