@@ -1,6 +1,9 @@
 package juego;
 
 import java.awt.*;
+import java.awt.Image;
+
+import javax.swing.ImageIcon;
 
 import entorno.Entorno;
 
@@ -10,23 +13,37 @@ public class Princesa {
 	private int velocidadX;
 	private double angulo;
 	private int totalSaltos;
+	private Image sprite;
+	private Image quieta;
+	private Image moverDerecha;
+	private Image moverIzquierda;
+	
 	
 	public Princesa() {
 		this.area = new Rectangle(400, 300, 20, 40);
 		this.velocidadY = 0;
 		this.angulo = 0;
 		this.totalSaltos = 0;
+		sprite = new ImageIcon("src/moverder.gif").getImage();
+		quieta = new ImageIcon("src/quieta.gif").getImage();
+		moverDerecha = new ImageIcon("src/moverder.gif").getImage();
+		moverIzquierda = new ImageIcon("src/moverizq.gif").getImage();
+		
+		sprite = quieta;
 	}
 	
 	public void moverLateralmente(Entorno entorno) {
 		 if(entorno.estaPresionada(entorno.TECLA_DERECHA)){
 			  this.velocidadX = 4;
+			  sprite = moverDerecha;
 		}
 		 else if(entorno.estaPresionada(entorno.TECLA_IZQUIERDA)) {
 			  this.velocidadX = -4;
+			  sprite = moverIzquierda;
 		 }
 		 else {
 			 this.velocidadX = 0;
+			 sprite = quieta;
 	
 		 }
 	}
@@ -102,7 +119,13 @@ public class Princesa {
 	}
 
 	public void dibujarPrincesa(Entorno entorno, int camaraX) {
-		entorno.dibujarRectangulo(area.x - camaraX, area.y, area.width, area.height, this.angulo, Color.RED);
+
+	    entorno.dibujarImagen(
+	        sprite,
+	        area.x - camaraX,
+	        area.y,
+	        0
+	    );
 	}
 	
 }

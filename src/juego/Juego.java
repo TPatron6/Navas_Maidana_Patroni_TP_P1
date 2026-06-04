@@ -1,6 +1,6 @@
 package juego;
 
-
+import java.awt.Image;
 import java.awt.*;
 import java.util.Random;
 
@@ -11,7 +11,11 @@ import entorno.InterfaceJuego;
 public class Juego extends InterfaceJuego
 {
 	//inicio de juego 
-	private boolean juegoIniciado = false;
+	private static final int MENU = 0;
+	private static final int JUGANDO = 1;
+	private static final int GAME_OVER = 2;
+
+	private int estado = MENU;
 	// game over 
 	
 	// El objeto Entorno que controla el tiempo y otros
@@ -65,143 +69,7 @@ public class Juego extends InterfaceJuego
         // cámara
         this.camaraX = 0;
         
-        
-
-     
-        // ISLAS RANDOM
-        
-        Random random = new Random();
-
-    	
-        islas = new Islas[4][240];     //SUPONEMOS 30 ISLAS DE 8 BLOQUES CADA UNA POR NIVEL
-        
-        int y;
-        int x;
-        int ancho = 40; 
-        int alto = 30; 
-        int cantBloquesPorIsla;
-        int totalIslasPorNivel = 0;
-    	int totalDeIslas2 = random.nextInt(6,11);
-    	int variacionDeBloque = 0;
-    	boolean esRompible = false;
-    	boolean esInestable = false;
-    	boolean primerIsla = true;
-    	
-        for(int fila=0; fila < 4; fila++) {
-        	y = niveles[fila];
-        	x = random.nextInt(301);
-        	cantBloquesPorIsla = 0;
-        	
-        	switch(fila) {
-        	case 0 : totalIslasPorNivel = 30; break;
-        	case 1 : totalIslasPorNivel = random.nextInt(12,19); break;
-        	case 2 : totalIslasPorNivel = totalDeIslas2; break;
-        	case 3 : totalIslasPorNivel = random.nextInt(2, totalDeIslas2 + 1); break;
-        	}
-        	
-        	int columna = 0;
-        	while(totalIslasPorNivel > 0 || cantBloquesPorIsla >0){
-        		if(cantBloquesPorIsla == 0) { //SI ES 0 HAY QUE INICIAR UNA NUEVA ISLA
-        			cantBloquesPorIsla = random.nextInt(3,9);
-        			totalIslasPorNivel --;
-        			if(!primerIsla) {
-        				if(fila == 0 || fila == 1) {
-        					x += random.nextInt(80,121); //DISTANCIA ENTRE ISLAS
-        				}
-        				else {
-        					x += random.nextInt(160, 200);
-        				}
-        			}
-        			else {
-        				primerIsla = false;
-        			}
-        			if(fila != 0) {
-        				variacionDeBloque = random.nextInt(3);
-        			}
-        		}
-        		if (variacionDeBloque == 2) {
-        			esInestable = true;
-        			esRompible = false;
-        		}
-        		else if(variacionDeBloque == 1) {
-        			esInestable = false;
-        			esRompible = true;
-        		}
-        		else {
-        			esInestable = false;
-        			esRompible = false;
-        		}
-        		islas[fila][columna] = new Islas(x, y, ancho, alto, esRompible, esInestable);
-	       		columna ++;
-	       		cantBloquesPorIsla --;
-	       		x += 40; //20PX DEL ANCHO DE LA PRIMER ISLA + 20 PX DEL ANCHO DE LA SEGUNDA ISLA
-        	}
-        	
-        }
-        
-        int indiceEnemigo = 0;
-
-        for(int i = 0;
-            i < islas[0].length
-            && indiceEnemigo < enemigosTerrestres.length;
-            i++) {
-
-            if(islas[0][i] == null) {
-                continue;
-            }
-
-            boolean inicioDeIsla = false;
-
-            if(i == 0) {
-                inicioDeIsla = true;
-            }
-            else if(islas[0][i - 1] == null) {
-                inicioDeIsla = true;
-            }
-            else {
-
-                int distancia =
-                    islas[0][i].getX()
-                    - islas[0][i - 1].getX();
-
-                if(distancia > 40) {
-                    inicioDeIsla = true;
-                }
-            }
-
-            if(inicioDeIsla) {
-
-                int ultimoBloque = i;
-
-                while(
-                    ultimoBloque + 1 < islas[0].length
-                    && islas[0][ultimoBloque + 1] != null
-                    && islas[0][ultimoBloque + 1].getX()
-                       - islas[0][ultimoBloque].getX() == 40
-                ) {
-                    ultimoBloque++;
-                }
-
-                int limiteIzquierdo =
-                    islas[0][i].getX()
-                    - islas[0][i].getAncho()/2;
-
-                int limiteDerecho =
-                    islas[0][ultimoBloque].getX()
-                    + islas[0][ultimoBloque].getAncho()/2;
-
-                enemigosTerrestres[indiceEnemigo] =
-                    new EnemigoTerrestre(
-                        islas[0][i].getX(),
-                        niveles[0] - 15 - 10,
-                        limiteIzquierdo,
-                        limiteDerecho
-                    );
-
-                indiceEnemigo++;
-            }
-        }
-        
+        generarMapa();
 	        
 		// Inicia el juego!
 		this.entorno.iniciar();
@@ -269,6 +137,265 @@ public class Juego extends InterfaceJuego
 		    }
 		}
 		
+		public void escribirTextoCentrado(String texto, int centroX, int y) {
+
+		    int x = centroX - (texto.length() * 13);
+
+		    entorno.escribirTexto(texto, x, y);
+		}
+		
+		
+		public void dibujarMenu() {
+
+		    entorno.cambiarFont("Arial", 40, Color.WHITE);
+		    escribirTextoCentrado(
+		    	    "PRINCESA AVENTURA",
+		    	    400,
+		    	    150
+		    	);
+
+		    entorno.dibujarRectangulo(
+		        400, 250, 200, 50, 0, Color.GREEN
+		    );
+
+		    entorno.dibujarRectangulo(
+		        400, 350, 200, 50, 0, Color.RED
+		    );
+
+		    entorno.cambiarFont("Arial", 30, Color.BLACK);
+		    escribirTextoCentrado(
+		    	    "INICIAR",
+		    	    400,
+		    	    255
+		    	);
+
+		    entorno.cambiarFont("Arial", 30, Color.BLACK);
+		    escribirTextoCentrado(
+		    	    "SALIR",
+		    	    400,
+		    	    355
+		    	);
+		}
+		
+		
+		
+		public void controlarMenu() {
+
+		    if (entorno.sePresionoBoton(entorno.BOTON_IZQUIERDO)) {
+
+		        int mx = entorno.mouseX();
+		        int my = entorno.mouseY();
+
+		        // BOTON INICIAR
+
+		        if (mx >= 300 && mx <= 500 &&
+		            my >= 225 && my <= 275) {
+
+		            estado = JUGANDO;
+		        }
+
+		        // BOTON SALIR
+
+		        if (mx >= 300 && mx <= 500 &&
+		            my >= 325 && my <= 375) {
+
+		            System.exit(0);
+		        }
+		    }
+		}
+		
+		public void dibujarGameOver() {
+
+		    entorno.escribirTexto(
+		        "GAME OVER",
+		        350,
+		        220
+		    );
+
+		    entorno.escribirTexto(
+		        "CLICK PARA REINTENTAR",
+		        320,
+		        320
+		    );
+		}
+		
+		public void reiniciarJuego() {
+
+		    vidas = new vidas(3);
+
+		    princesa = new Princesa();
+
+		    camaraX = 0;
+
+		    proyectil = null;
+
+		    enemigos = new AereoNormal[20];
+
+		    enemigosRapidos = new AereoRapido[20];
+
+		    enemigosTerrestres = new EnemigoTerrestre[20];
+
+		    estado = JUGANDO;
+		}
+		
+		public void generarMapa() {
+	        // ISLAS RANDOM
+	        
+	        Random random = new Random();
+
+	    	
+	        islas = new Islas[4][240];     //SUPONEMOS 30 ISLAS DE 8 BLOQUES CADA UNA POR NIVEL
+	        
+	        int y;
+	        int x;
+	        int ancho = 40; 
+	        int alto = 30; 
+	        int cantBloquesPorIsla;
+	        int totalIslasPorNivel = 0;
+	    	int totalDeIslas2 = random.nextInt(6,11);
+	    	int variacionDeBloque = 0;
+	    	boolean esRompible = false;
+	    	boolean esInestable = false;
+	    	boolean primerIsla = true;
+	    	
+	        for(int fila=0; fila < 4; fila++) {
+	        	y = niveles[fila];
+	        	x = random.nextInt(301);
+	        	cantBloquesPorIsla = 0;
+	        	
+	        	switch(fila) {
+	        	case 0 : totalIslasPorNivel = 30; break;
+	        	case 1 : totalIslasPorNivel = random.nextInt(12,19); break;
+	        	case 2 : totalIslasPorNivel = totalDeIslas2; break;
+	        	case 3 : totalIslasPorNivel = random.nextInt(2, totalDeIslas2 + 1); break;
+	        	}
+	        	
+	        	int columna = 0;
+	        	while(totalIslasPorNivel > 0 || cantBloquesPorIsla >0){
+	        		if(cantBloquesPorIsla == 0) { //SI ES 0 HAY QUE INICIAR UNA NUEVA ISLA
+	        			cantBloquesPorIsla = random.nextInt(3,9);
+	        			totalIslasPorNivel --;
+	        			if(!primerIsla) {
+	        				if(fila == 0 || fila == 1) {
+	        					x += random.nextInt(80,121); //DISTANCIA ENTRE ISLAS
+	        				}
+	        				else {
+	        					x += random.nextInt(160, 200);
+	        				}
+	        			}
+	        			else {
+	        				primerIsla = false;
+	        			}
+	        			if(fila != 0) {
+	        				variacionDeBloque = random.nextInt(3);
+	        			}
+	        		}
+	        		if (variacionDeBloque == 2) {
+	        			esInestable = true;
+	        			esRompible = false;
+	        		}
+	        		else if(variacionDeBloque == 1) {
+	        			esInestable = false;
+	        			esRompible = true;
+	        		}
+	        		else {
+	        			esInestable = false;
+	        			esRompible = false;
+	        		}
+	        		islas[fila][columna] = new Islas(x, y, ancho, alto, esRompible, esInestable);
+		       		columna ++;
+		       		cantBloquesPorIsla --;
+		       		x += 40; //20PX DEL ANCHO DE LA PRIMER ISLA + 20 PX DEL ANCHO DE LA SEGUNDA ISLA
+	        	}
+	        	
+	        }
+	        
+	        int indiceEnemigo = 0;
+
+	        for(int i = 0;
+	            i < islas[0].length
+	            && indiceEnemigo < enemigosTerrestres.length;
+	            i++) {
+
+	            if(islas[0][i] == null) {
+	                continue;
+	            }
+
+	            boolean inicioDeIsla = false;
+
+	            if(i == 0) {
+	                inicioDeIsla = true;
+	            }
+	            else if(islas[0][i - 1] == null) {
+	                inicioDeIsla = true;
+	            }
+	            else {
+
+	                int distancia =
+	                    islas[0][i].getX()
+	                    - islas[0][i - 1].getX();
+
+	                if(distancia > 40) {
+	                    inicioDeIsla = true;
+	                }
+	            }
+
+	            if(inicioDeIsla) {
+
+	                int ultimoBloque = i;
+
+	                while(
+	                    ultimoBloque + 1 < islas[0].length
+	                    && islas[0][ultimoBloque + 1] != null
+	                    && islas[0][ultimoBloque + 1].getX()
+	                       - islas[0][ultimoBloque].getX() == 40
+	                ) {
+	                    ultimoBloque++;
+	                }
+
+	                int limiteIzquierdo =
+	                    islas[0][i].getX()
+	                    - islas[0][i].getAncho()/2;
+
+	                int limiteDerecho =
+	                    islas[0][ultimoBloque].getX()
+	                    + islas[0][ultimoBloque].getAncho()/2;
+
+	                enemigosTerrestres[indiceEnemigo] =
+	                    new EnemigoTerrestre(
+	                        islas[0][i].getX(),
+	                        niveles[0] - 15 - 10,
+	                        limiteIzquierdo,
+	                        limiteDerecho
+	                    );
+
+	                indiceEnemigo++;
+	            }
+	        }
+		}
+		
+		public void reiniciarMapa() {
+
+		    enemigos = new AereoNormal[20];
+
+		    enemigosRapidos = new AereoRapido[20];
+
+		    enemigosTerrestres =
+		        new EnemigoTerrestre[20];
+
+		    proyectil = null;
+
+		    princesa = new Princesa();
+
+		    vidas = new vidas(3);
+
+		    camaraX = 0;
+
+		    generarMapa();
+		    
+		    estado = MENU;
+		}
+	
 	/**
 	 * Durante el juego, el método tick() será ejecutado en cada instante y 
 	 * por lo tanto es el método más importante de esta clase. Aquí se debe 
@@ -276,70 +403,41 @@ public class Juego extends InterfaceJuego
 	 * (ver el enunciado del TP para mayor detalle).
 	 */
 	public void tick() {
-		if (vidas.getCantidad() <= 0) {
 
-<<<<<<< HEAD
-		    entorno.escribirTexto("GAME OVER", 330, 300);
+		if (estado == MENU) {
 
-		    juegoIniciado = false;
+		    dibujarMenu();
 
-		    this.vidas = new vidas(3);
-
-		    princesa.setX(400);
-		    princesa.setY(300);
-
-		    camaraX = 0;
+		    controlarMenu();
 
 		    return;
 		}
 		
-	      if (!juegoIniciado) {
-	    	  
+		
+		
+		if (vidas.getCantidad() <= 0) {
 
-		    // Título
-		    entorno.escribirTexto("PRINCESA AVENTURA", 300, 150);
+		    estado = GAME_OVER;
+		}
+		
+		if (estado == GAME_OVER) {
 
-		    // Botón iniciar
-		    
-		    entorno.escribirTexto("ENTER = INICIAR", 330, 255);
+		    dibujarGameOver();
 
-		    // Botón salir
-		   
-		    entorno.escribirTexto("ESC = SALIR", 340, 355);
+		    if (entorno.sePresionoBoton(
+		            entorno.BOTON_IZQUIERDO)) {
 
-		    if (entorno.sePresiono(entorno.TECLA_ENTER)) {
-		        juegoIniciado = true;
+		        reiniciarMapa();
 		    }
-
-		    if (entorno.sePresiono(entorno.TECLA_ESCAPE)) {
-		        System.exit(0);
-		    }
-
-		    return;
-	      }
-		   
-
-			    if (entorno.sePresiono(entorno.TECLA_ESCAPE)) {
-			        System.exit(0);
-			    
-
-			  
-		    //GENERAR NORMALES
-=======
-		    entorno.escribirTexto(
-		        "GAME OVER",
-		        330,
-		        300
-		    );
 
 		    return;
 		}
-
+		
 	    //GENERAR NORMALES
 
 	    if (entorno.tiempo() > 3000
 	        && contarEnemigos() < 10) {
->>>>>>> 75417c7fefe55208623cc5a2e900eda643db7a41
+
 
 	        if (entorno.numeroDeTick() % 100 == 0) {
 
@@ -368,7 +466,7 @@ public class Juego extends InterfaceJuego
 
 	    //GENERAR RAPIDOS
 
-	    if (entorno.tiempo() > 3000
+	    if (entorno.tiempo() > 20000
 	        && contarEnemigos() < 10) {
 
 	        if (entorno.numeroDeTick() % 150 == 0) {
@@ -657,12 +755,12 @@ public class Juego extends InterfaceJuego
 	 	    vidas.perderVida();
 
 	 	    this.princesa = new Princesa();
-<<<<<<< HEAD
+
 	 	   this.princesa.setX(400);
 	 	   this.princesa.setY(300);
-=======
 
->>>>>>> 75417c7fefe55208623cc5a2e900eda643db7a41
+
+
 	 	    camaraX = 0;
 	 	}
 	    
