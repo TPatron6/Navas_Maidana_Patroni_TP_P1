@@ -4,7 +4,7 @@ import java.awt.*;
 
 import entorno.Entorno;
 
-public class Islas {
+public class Bloques {
 	
 	private Rectangle area;
 	private boolean rompible;
@@ -22,7 +22,7 @@ public class Islas {
 		this.direccion = direccion;
 	}
 
-	public Islas(int x, int y, int ancho, int alto, boolean esRompible, boolean esInestable) {
+	public Bloques(int x, int y, int ancho, int alto, boolean esRompible, boolean esInestable) {
     	this.area = new Rectangle(x, y, ancho, alto);
     	this.rompible = esRompible;
     	this.inestable = esInestable;
@@ -53,7 +53,7 @@ public class Islas {
 		return inestable;
 	}
 
-	public void dibujar(Entorno entorno, int x) {
+	public void dibujar(Entorno entorno, int xCentro, int yCentro) {
     	Color color = Color.GREEN;
     	if(this.rompible) {
     		color = Color.ORANGE;
@@ -61,9 +61,10 @@ public class Islas {
     	if(this.inestable) {
     		color = Color.PINK;
     	}
+   	
         entorno.dibujarRectangulo(
-                x,
-                area.y,
+                xCentro,
+                yCentro,
                 area.width,
                 area.height,
                 0,

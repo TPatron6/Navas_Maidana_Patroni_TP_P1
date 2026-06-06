@@ -6,6 +6,6 @@
 		</attributes>
 	</classpathentry>
 	<classpathentry kind="src" path="src"/>
-	<classpathentry kind="lib" path="C:/Users/TOMÁS/OneDrive/Escritorio/TP p1/Navas_Maidana_Patroni_TP_P1-main/entorno.jar"/>
+	<classpathentry exported="true" kind="lib" path="entorno.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

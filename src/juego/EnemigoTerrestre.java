@@ -1,12 +1,12 @@
 package juego;
 
 import java.awt.Color;
+import java.awt.Rectangle;
 import entorno.Entorno;
 
 public class EnemigoTerrestre {
-
-    private int x;
-    private int y;
+   
+    private Rectangle area;
     
     private int velocidadY;
 
@@ -17,9 +17,7 @@ public class EnemigoTerrestre {
     private int limiteDerecho;
 
     public EnemigoTerrestre(int x, int y, int limteIzquierdo, int limiteDerecho) {
-
-        this.x = x;
-        this.y = y;
+    	this.area= new Rectangle(x, y, 20, 20);
         
         this.limiteIzquierdo =limteIzquierdo;
         this.limiteDerecho =limiteDerecho;
@@ -33,17 +31,17 @@ public class EnemigoTerrestre {
 
     public void mover() {
 
-        x += velocidad * direccion;
+        this.area.x += velocidad * direccion;
 
-        if(x <= limiteIzquierdo) {
+        if(this.area.x <= limiteIzquierdo) {
 
-            x = limiteIzquierdo;
+            this.area.x = limiteIzquierdo;
             cambiarDireccion();
         }
 
-        if(x >= limiteDerecho) {
+        if(this.area.x + this.area.width >= limiteDerecho) {
 
-            x = limiteDerecho;
+            this.area.x = limiteDerecho - this.area.width;
             cambiarDireccion();
         }
     }
@@ -54,10 +52,13 @@ public class EnemigoTerrestre {
     }
 
     public void dibujar(Entorno entorno, int camaraX) {
+    	
+    	int xCentro = this.area.x + 10 - camaraX;
+    	int yCentro = this.area.y + 10;
 
         entorno.dibujarRectangulo(
-            x - camaraX,
-            y,
+            xCentro,
+            yCentro,
             20,
             20,
             0,
@@ -73,15 +74,15 @@ public class EnemigoTerrestre {
             velocidadY = 10;
         }
 
-        y += velocidadY;
+        this.area.y += velocidadY;
     }
 
     public int getX() {
-        return x;
+        return this.area.x;
     }
 
     public int getY() {
-        return y;
+        return this.area.y;
     }
     
     public int getVelocidadY() {
@@ -93,7 +94,19 @@ public class EnemigoTerrestre {
     }
 
     public void setY(int y) {
-        this.y = y;
+        this.area.y = y;
+    }
+    
+    public Rectangle getArea() {
+    	return area;
+    }
+    
+    public int getAncho() {
+    	return area.width;
+    }
+    
+    public int getAlto() {
+    	return area.height;
     }
 }
 

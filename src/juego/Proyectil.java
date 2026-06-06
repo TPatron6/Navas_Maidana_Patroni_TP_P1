@@ -1,30 +1,29 @@
 package juego;
 
 import java.awt.Color;
+import java.awt.Rectangle;
+
 import entorno.Entorno;
 
 public class Proyectil {
 
-    private double x;
-    private double y;
+	private Rectangle area;
 
     private double vx;
     private double vy;
 
-    private double velocidad;
+    private int velocidad;
 
     public Proyectil(int origenX,
                      int origenY,
                      int destinoX,
                      int destinoY) {
 
-        this.x = origenX;
-        this.y = origenY;
-
+        this.area = new Rectangle(origenX, origenY, 10, 10);
         this.velocidad = 4;
 
-        double dx = destinoX - origenX;
-        double dy = destinoY - origenY;
+        int dx = destinoX - origenX;
+        int dy = destinoY - origenY;
 
         double distancia =
             Math.sqrt(dx * dx + dy * dy);
@@ -35,15 +34,17 @@ public class Proyectil {
 
     public void mover() {
 
-        this.x += this.vx * this.velocidad;
-        this.y += this.vy * this.velocidad;
+        this.area.x += this.vx * this.velocidad;
+        this.area.y += this.vy * this.velocidad;
     }
 
     public void dibujar(Entorno entorno, int camaraX) {
+    	int xCentro = this.area.x + 5 - camaraX;
+    	int yCentro = this.area.y + 5;
 
         entorno.dibujarRectangulo(
-            this.x - camaraX,
-            this.y,
+            xCentro,
+            yCentro,
             10,
             10,
             0,
@@ -53,11 +54,15 @@ public class Proyectil {
 
     public boolean fueraDePantalla(int camaraX) {
 
-        double pantallaX = this.x - camaraX;
+        double pantallaX = this.area.x - camaraX;
 
         return pantallaX < -20
             || pantallaX > 820
-            || this.y < -20
-            || this.y > 620;
+            || this.area.y < -20
+            || this.area.y > 620;
+    }
+    
+    public Rectangle getArea() {
+    	return this.area;
     }
 }

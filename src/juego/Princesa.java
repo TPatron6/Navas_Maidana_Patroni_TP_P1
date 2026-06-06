@@ -1,7 +1,6 @@
 package juego;
 
 import java.awt.*;
-import java.awt.Image;
 
 import javax.swing.ImageIcon;
 
@@ -11,7 +10,7 @@ public class Princesa {
 	private Rectangle area;
 	private int velocidadY;
 	private int velocidadX;
-	private double angulo;
+//	private double angulo;
 	private int totalSaltos;
 	private Image sprite;
 	private Image quieta;
@@ -21,9 +20,9 @@ public class Princesa {
 	
 	
 	public Princesa() {
-		this.area = new Rectangle(400, 300, 20, 40);
+		this.area = new Rectangle(390, 280, 20, 40);
 		this.velocidadY = 0;
-		this.angulo = 0;
+	//	this.angulo = 0;
 		this.totalSaltos = 0;
 		this.vidas = 3;
 
@@ -123,13 +122,18 @@ public class Princesa {
 	public Rectangle getArea() {
 		return area;
 	}
+	
 
 	public void dibujarPrincesa(Entorno entorno, int camaraX) {
-
+		
+		int xCentro = this.area.x + (this.area.width / 2) ;
+		int yCentro = this.area.y + (this.area.height /2);
+		
+		
 	    entorno.dibujarImagen(
 	        sprite,
-	        area.x - camaraX,
-	        area.y,
+	        xCentro - camaraX,
+	        yCentro,
 	        0
 	    );
 	}

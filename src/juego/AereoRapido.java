@@ -1,32 +1,31 @@
 package juego;
 
 import java.awt.Color;
+import java.awt.Rectangle;
+
 import entorno.Entorno;
 
 public class AereoRapido {
-
-    private double x;
-    private double y;
+	
+	private Rectangle area;
     private double velocidad;
     private int direccion;
     
-    public AereoRapido(double xInicial, int direccionInicial) {
+    public AereoRapido(int xInicial, int direccionInicial) {
+    	this.area= new Rectangle (xInicial, generarAltura(), 20, 20);
 
-        this.x = xInicial;
-
-        // con esto ajusto la altura aleatoria entre 0 y 400 (evitando entrar en conflicto con la generacion de islas)
-        this.y = generarAltura();
-
-        this.velocidad = 2;
+        // con esto generarAltura ajusto la altura aleatoria entre 0 y 400 (evitando entrar en conflicto con la generacion de islas)
+        
+    	this.velocidad = 2;
         
         this.direccion = direccionInicial;
         
     }
 
     
-    private double generarAltura() {
+    private int generarAltura() {
 
-        double[] alturasValidas = {
+        int[] alturasValidas = {
 
            
         		70,
@@ -47,16 +46,19 @@ public class AereoRapido {
 
     public void mover() {
 
-    	this.x += this.velocidad * this.direccion;
+    	this.area.x += this.velocidad * this.direccion;
     }
 
     // dibujar
 
-    public void dibujar(Entorno entorno) {
+    public void dibujar(Entorno entorno, int camaraX) {
+    	
+    	int xCentro = this.area.x + 10 - camaraX;
+    	int yCentro = this.area.y + 10;
 
         entorno.dibujarRectangulo(
-            this.x,
-            this.y,
+        	xCentro,
+            yCentro,
             20,
             20,
             0,
@@ -66,18 +68,30 @@ public class AereoRapido {
 
     // limite para cuando sale de la pantalla
 
-    public boolean fueraDePantalla() {
+    public boolean fueraDePantalla(int camaraX) {
 
-        return this.x < 0 || this.x > 800;
+    	return this.area.x < camaraX || this.area.x > camaraX + 800;
     }
 
     // getters
 
-    public double getX() {
-        return this.x;
+    public int getX() {
+        return area.x;
     }
 
-    public double getY() {
-        return this.y;
+    public int getY() {
+        return area.y;
+    }
+    
+    public Rectangle getArea() {
+    	return area;
+    }
+    
+    public int getAncho() {
+    	return area.width;
+    }
+    
+    public int getAlto() {
+    	return area.height;
     }
 }

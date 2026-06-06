@@ -42,9 +42,10 @@ public class Juego extends InterfaceJuego
 	//Proyectil
     private Proyectil proyectil;
 	    
-	//Islas 
-	private Islas[][] islas; //[] lo converti en matriz
-	private int[] niveles = {585, 425, 285, 165};
+    //Islas 
+  	private Bloques[][] bloques;
+  	private int[] niveles = {570, 410, 270, 150};
+  	
 	
 	//GRAVEDAD
 	private void gravedad(Princesa princesa) {
@@ -104,26 +105,26 @@ public class Juego extends InterfaceJuego
 		
 		public void generarEnemigoTerrestre() {
 
-		    int cantidadIslas = 0;
+		    int cantidadBloques = 0;
 
-		    while (cantidadIslas < islas[0].length
-		            && islas[0][cantidadIslas] != null) {
+		    while (cantidadBloques < bloques[0].length
+		            && bloques[0][cantidadBloques] != null) {
 
-		        cantidadIslas++;
+		        cantidadBloques++;
 		    }
 
-		    if (cantidadIslas == 0) {
+		    if (cantidadBloques == 0) {
 		        return;
 		    }
 
-		    int indiceIsla =
-		        (int)(Math.random() * cantidadIslas);
+		    int indiceBloque =
+		        (int)(Math.random() * cantidadBloques);
 
-		    Islas isla = islas[0][indiceIsla];
+		    Bloques bloque = bloques[0][indiceBloque];
 
-		    int x = isla.getX();
+		    int x = bloque.getX();
 
-		    int y = isla.getY() - 30;
+		    int y = bloque.getY() - 20; //ALTO DEL ENEMIGO
 
 		    for (int i = 0;
 		         i < enemigosTerrestres.length;
@@ -246,7 +247,7 @@ public class Juego extends InterfaceJuego
 	        Random random = new Random();
 
 	    	
-	        islas = new Islas[4][240];     //SUPONEMOS 30 ISLAS DE 8 BLOQUES CADA UNA POR NIVEL
+	        bloques = new Bloques[4][240];     //SUPONEMOS 30 ISLAS DE 8 BLOQUES CADA UNA POR NIVEL
 	        
 	        int y;
 	        int x;
@@ -262,7 +263,7 @@ public class Juego extends InterfaceJuego
 	    	
 	        for(int fila=0; fila < 4; fila++) {
 	        	y = niveles[fila];
-	        	x = random.nextInt(301);
+	        	x = random.nextInt(41);
 	        	cantBloquesPorIsla = 0;
 	        	
 	        	switch(fila) {
@@ -279,7 +280,7 @@ public class Juego extends InterfaceJuego
 	        			totalIslasPorNivel --;
 	        			if(!primerIsla) {
 	        				if(fila == 0 || fila == 1) {
-	        					x += random.nextInt(80,121); //DISTANCIA ENTRE ISLAS
+	        					x += random.nextInt(80, 120); //DISTANCIA ENTRE ISLAS
 	        				}
 	        				else {
 	        					x += random.nextInt(160, 200);
@@ -304,22 +305,23 @@ public class Juego extends InterfaceJuego
 	        			esInestable = false;
 	        			esRompible = false;
 	        		}
-	        		islas[fila][columna] = new Islas(x, y, ancho, alto, esRompible, esInestable);
+	        		bloques[fila][columna] = new Bloques(x, y, ancho, alto, esRompible, esInestable);
 		       		columna ++;
 		       		cantBloquesPorIsla --;
-		       		x += 40; //20PX DEL ANCHO DE LA PRIMER ISLA + 20 PX DEL ANCHO DE LA SEGUNDA ISLA
+		       		x += 40; //ANCHO DEL BLOQUE
 	        	}
 	        	
 	        }
+	 
 	        
 	        int indiceEnemigo = 0;
 
 	        for(int i = 0;
-	            i < islas[0].length
+	            i < bloques[0].length
 	            && indiceEnemigo < enemigosTerrestres.length;
 	            i++) {
 
-	            if(islas[0][i] == null) {
+	            if(bloques[0][i] == null) {
 	                continue;
 	            }
 
@@ -328,14 +330,14 @@ public class Juego extends InterfaceJuego
 	            if(i == 0) {
 	                inicioDeIsla = true;
 	            }
-	            else if(islas[0][i - 1] == null) {
+	            else if(bloques[0][i - 1] == null) {
 	                inicioDeIsla = true;
 	            }
 	            else {
 
 	                int distancia =
-	                    islas[0][i].getX()
-	                    - islas[0][i - 1].getX();
+	                    bloques[0][i].getX()
+	                    - bloques[0][i - 1].getX();
 
 	                if(distancia > 40) {
 	                    inicioDeIsla = true;
@@ -350,26 +352,25 @@ public class Juego extends InterfaceJuego
 	                int ultimoBloque = i;
 
 	                while(
-	                    ultimoBloque + 1 < islas[0].length
-	                    && islas[0][ultimoBloque + 1] != null
-	                    && islas[0][ultimoBloque + 1].getX()
-	                       - islas[0][ultimoBloque].getX() == 40
+	                    ultimoBloque + 1 < bloques[0].length
+	                    && bloques[0][ultimoBloque + 1] != null
+	                    && bloques[0][ultimoBloque + 1].getX()
+	                       - bloques[0][ultimoBloque].getX() == 40
 	                ) {
 	                    ultimoBloque++;
 	                }
 
 	                int limiteIzquierdo =
-	                    islas[0][i].getX()
-	                    - islas[0][i].getAncho()/2;
+	                    bloques[0][i].getX();
 
 	                int limiteDerecho =
-	                    islas[0][ultimoBloque].getX()
-	                    + islas[0][ultimoBloque].getAncho()/2;
+	                    bloques[0][ultimoBloque].getX()
+	                    + bloques[0][ultimoBloque].getAncho();
 
 	                enemigosTerrestres[indiceEnemigo] =
 	                    new EnemigoTerrestre(
-	                        islas[0][i].getX(),
-	                        niveles[0] - 15 - 10,
+	                        bloques[0][i].getX(),
+	                        niveles[0] - 20, // ALTO DEL ENEMIGO
 	                        limiteIzquierdo,
 	                        limiteDerecho
 	                    );
@@ -470,13 +471,14 @@ public class Juego extends InterfaceJuego
 
 	                	    //asi va de derecha a izquierda
 	                	    enemigos[i] =
-	                	        new AereoNormal(entorno.ancho(), -1);
+	                	        new AereoNormal(camaraX + 800, -1);
+
 
 	                	} else {
 
 	                	    //asi va de izquierda a derecha
 	                	    enemigos[i] =
-	                	        new AereoNormal(0, 1);
+	                	        new AereoNormal(camaraX, 1);
 	                	}
 
 	                    break;
@@ -499,12 +501,12 @@ public class Juego extends InterfaceJuego
 	                	if (Math.random() < 0.5) {
 
 	                	    enemigosRapidos[i] =
-	                	        new AereoRapido(entorno.ancho(), -1);
+	                	        new AereoRapido(camaraX + 800, -1);
 
 	                	} else {
 
 	                	    enemigosRapidos[i] =
-	                	        new AereoRapido(0, 1);
+	                	        new AereoRapido(camaraX, 1);
 	                	}
 
 	                    break;
@@ -521,9 +523,9 @@ public class Juego extends InterfaceJuego
 
 	            enemigos[i].mover();
 
-	            enemigos[i].dibujar(entorno);
+	            enemigos[i].dibujar(entorno, camaraX);
 
-	            if (enemigos[i].fueraDePantalla()) {
+	            if (enemigos[i].fueraDePantalla(camaraX)) {
 
 	                enemigos[i] = null;
 	            }
@@ -538,9 +540,9 @@ public class Juego extends InterfaceJuego
 
 	            enemigosRapidos[i].mover();
 
-	            enemigosRapidos[i].dibujar(entorno);
+	            enemigosRapidos[i].dibujar(entorno, camaraX);
 
-	            if (enemigosRapidos[i].fueraDePantalla()) {
+	            if (enemigosRapidos[i].fueraDePantalla(camaraX)) {
 
 	                enemigosRapidos[i] = null;
 	            }
@@ -559,7 +561,7 @@ public class Juego extends InterfaceJuego
 
 	    	        enemigosTerrestres[i].gravedad();
 	    	        
-	    	        int pisoEnemigo = niveles[0] - 15 - 10;
+	    	        int pisoEnemigo = niveles[0] - enemigosTerrestres[i].getAlto();
 
 	    	        if (enemigosTerrestres[i].getY() > pisoEnemigo) {
 
@@ -578,38 +580,36 @@ public class Juego extends InterfaceJuego
 
 	    this.princesa.moverLateralmente(entorno);    
 	    
-
+  // COLISIONES CON ISLAS
         
-     // COLISIONES CON ISLAS
-        
-       	int izqPrincesa = this.princesa.getX() - this.princesa.getAncho() /2;
-       	int derPrincesa = this.princesa.getX() + this.princesa.getAncho() /2;
-       	int abajoPrincesa = this.princesa.getY() + 20;
-    	int arribaPrincesa = this.princesa.getY() - 20;
+       	int izqPrincesa = this.princesa.getX();
+       	int derPrincesa = this.princesa.getX() + this.princesa.getAncho();
+       	int abajoPrincesa = this.princesa.getY() + this.princesa.getAlto();
+    	int arribaPrincesa = this.princesa.getY();
 
        	boolean toco = false;
        	
          
      	//COLISION CON BORDE LATERAL DE ISLA
       	for(int i=0; i < niveles.length; i++ ) {
-      		int bordeInferiorIsla = niveles[i] + 15; 
-      		int bordeSuperiorIsla = niveles[i] - 15;
+      		int bordeInferiorIsla = niveles[i] + 30; //ALTO DE LOS BLOQUES 
+      		int bordeSuperiorIsla = niveles[i];
         		
       		if(arribaPrincesa < bordeInferiorIsla && abajoPrincesa > bordeSuperiorIsla) {
 	       		int k = 0;
 	        		
-	       		while(!toco && k< islas[i].length) {
-	       			if(islas[i][k] != null) {
+	       		while(!toco && k< bloques[i].length) {
+	       			if(bloques[i][k] != null) {
 	        		
-		        		int izqIsla = islas[i][k].getX() - islas[i][k].getAncho() / 2;
-		        		int derIsla = islas[i][k].getX() + islas[i][k].getAncho() / 2;
+		        		int izqIsla = bloques[i][k].getX();
+		        		int derIsla = bloques[i][k].getX() + bloques[i][k].getAncho();
 		        		  		        	
 		        		if(princesa.getVelocidadX() > 0 && derPrincesa <= izqIsla && derPrincesa + princesa.getVelocidadX() >= izqIsla ) { //DESPLAZAMIENTO A LA DERECHA
 		        			toco = true;
 		        			princesa.setVelocidadY(3);
 		        			princesa.setVelocidadX(0);
 			        			
-		        			int nuevaPosicionx = izqIsla - (this.princesa.getAncho()/2); 
+		        			int nuevaPosicionx = izqIsla - this.princesa.getAncho(); 
 		        			princesa.setX(nuevaPosicionx);
 		        			
 		          		}
@@ -619,7 +619,7 @@ public class Juego extends InterfaceJuego
 		        			princesa.setVelocidadY(3);
 			        		princesa.setVelocidadX(0);
 			        		
-		        			int nuevaPosicionx = derIsla + (this.princesa.getAncho()/2);
+		        			int nuevaPosicionx = derIsla;
 		        			princesa.setX(nuevaPosicionx);
 		        			
 		          		}
@@ -637,152 +637,234 @@ public class Juego extends InterfaceJuego
        		int nuevoX = princesa.getX() + princesa.getVelocidadX();
        		princesa.setX(nuevoX);
        	}
-       	
-     // MOVIMIENTO JUGADOR SOBRE EJE Y 
+       	       	
+        // MOVIMIENTO JUGADOR SOBRE EJE Y 
 	    
-	    if(this.princesa.getTotalSaltos() < 2) {
-	    	this.princesa.saltar(entorno);
-	    }
-        
-     // GRAVEDAD
-        
-	 	this.gravedad(princesa);
+   	    if(this.princesa.getTotalSaltos() < 2) {
+   	    	this.princesa.saltar(entorno);
+   	    }
+           
+        // GRAVEDAD
+           
+   	 	this.gravedad(princesa);
 
 
-	 // COLISIONES CON ISLAS
-	 	int nuevoY = princesa.getY() + princesa.getVelocidadY();
+   	 // COLISIONES CON ISLAS
+   	 	int nuevoY = princesa.getY() + princesa.getVelocidadY();
+   	 	
+          	izqPrincesa = this.princesa.getX() + 2;
+          	derPrincesa = this.princesa.getX() + this.princesa.getAncho() - 2;
+          	abajoPrincesa = nuevoY + this.princesa.getAlto(); //NUEVA POSICION LUEGO DEL MOVIMIENTO
+       	arribaPrincesa = nuevoY;  //NUEVA POSICION LUEGO DEL MOVIMIENTO 	
+          	boolean sobreIsla = false;
+     
+          	//COLISION CON EL BORDE INFERIOR DE LA ISLA (TECHO)
+     
+        	if (princesa.getVelocidadY() < 0) {
+        	    for(int i=0 ; i < niveles.length; i++ ) {
+        	    	
+        	        int bordeInferiorIsla = niveles[i] + 30; //ALTO DEL BLOQUE 
+        	        int bordeSuperiorIsla = niveles[i];
+
+        	        if (arribaPrincesa >= bordeInferiorIsla || abajoPrincesa <= bordeSuperiorIsla) { //SI LA PRINCESA ESTA COMPLETAMENTE POR ENCIMA O POR DEBAJO DE UNA ISLA, NO ESTA A NIVEL DE LAS ISLAS
+        	            continue;
+        	        }
+
+        	        int k = 0;
+        	        while(!sobreIsla && k < bloques[i].length) {
+        	        	if(bloques[i][k] != null) {
+   	     	            int izqIsla = bloques[i][k].getX();
+   	     	            int derIsla = bloques[i][k].getX() + bloques[i][k].getAncho();
+   	     	            
+   	     	            if(izqPrincesa <= derIsla && derPrincesa >= izqIsla) {
+   	     	            	if(bloques[i][k].isRompible()) {
+   	     	                	bloques[i][k] = null;
+   	     	            	}
+   	     	            		sobreIsla = true;
+   	     	            		this.princesa.setVelocidadY(0);
+   	     	            		nuevoY = bordeInferiorIsla;
+   	     	            }
+        	        	}
+        	            k++;
+        	        }
+        	        if(sobreIsla) break;
+        	    }
+        	}
+           
+        	abajoPrincesa = nuevoY + this.princesa.getAlto(); 
+           arribaPrincesa = nuevoY;
+        	
+          	//COLISION CON BORDE SUPERIOR DE ISLA (PISO)
+           if (princesa.getVelocidadY() >= 0) {
+               for(int i=0; i < niveles.length; i++ ) {
+         
+                   int k = 0;
+                   while(k < bloques[i].length) { 
+                   	if(bloques[i][k] != null){
+                   		
+                   		if(bloques[i][k].isCaidaActiva() && entorno.numeroDeTick() >= bloques[i][k].getTickCaida()) {
+                        		int columnaSiguiente = k;
+                        		int xSiguiente = bloques[i][k].getX();
+                        		String direccionActual = bloques[i][k].getDireccion();
+                        		
+                   			if(direccionActual != null && direccionActual.equals("Derecha")) {
+                   				columnaSiguiente += 1;
+                   				xSiguiente += 40;
+                   			}
+                   			else {
+                   				columnaSiguiente -= 1;
+                   				xSiguiente -= 40;
+                   			}
+                   			
+                   			if(columnaSiguiente >= 0 && columnaSiguiente < bloques[i].length) {
+                   				
+   	                			if(bloques[i][columnaSiguiente] != null && bloques[i][columnaSiguiente].getX() == xSiguiente && bloques[i][columnaSiguiente].isInestable()) {
+   	                				bloques[i][columnaSiguiente].setCaidaActiva(true);
+   	                				bloques[i][columnaSiguiente].setTickCaida(entorno.numeroDeTick() + 4);
+   	                				bloques[i][columnaSiguiente].setDireccion(direccionActual);
+   	                			}
+                   			}
+                   			bloques[i][k] = null;	
+                   			k++;
+                   			continue;
+                   		}
+                   		
+                   		   int bordeSuperiorDeIsla = niveles[i];
+                           int bordeInferiorIsla = niveles[i] + 30; //ALTO DE LA ISLA
+                           
+                           if (abajoPrincesa <= bordeSuperiorDeIsla || arribaPrincesa >= bordeInferiorIsla) { //SI LA PRINCESA ESTA COMPLETAMENTE POR ENCIMA O POR DEBAJO DE UNA ISLA, NO ESTA A NIVEL DE LAS ISLAS
+                           	k++;
+                               continue; 
+                           }
+                           
+   	                    int izqIsla = bloques[i][k].getX();
+   	                    int derIsla = bloques[i][k].getX() + bloques[i][k].getAncho();
+   	                            
+   	                    if(izqPrincesa <= derIsla && derPrincesa >= izqIsla) {
+   	                    	if(!bloques[i][k].isCaidaActiva() && bloques[i][k].isInestable()) {
+   	                            bloques[i][k].setCaidaActiva(true);
+   	                            bloques[i][k].setTickCaida(entorno.numeroDeTick() + 20);
+   	                            
+   	                            if(princesa.getVelocidadX() >= 0) {
+   	                                bloques[i][k].setDireccion("Derecha");
+   	                            } else {
+   	                                bloques[i][k].setDireccion("Izquierda");
+   	                            }
+   	                        }
+   	                    	
+   	                        this.princesa.setVelocidadY(0);
+   	                        nuevoY = niveles[i] - this.princesa.getAlto(); 
+   	                        this.princesa.setTotalSaltos(0);
+   	                    }
+                   	}
+                       k++;
+                   }   
+               }
+           }
+           
+           if(nuevoY < 0) {
+           	nuevoY = 0;
+           	this.princesa.setVelocidadY(0);
+           }
+          	
+           princesa.setY(nuevoY);
+           
+           
+           // PERDER VIDA SI CAE
+
+   	 	if (this.princesa.getY() > 700) {
+
+   	 	   this.princesa.perderVida();
+   	 	   this.princesa.setX(390);
+   	 	   this.princesa.setY(280);
+
+
+   	 	    camaraX = 0;
+   	 	}
+   	 	
+   	 	
+   	 	// PERDER VIDA SI CHOCA CON UN ENEMIGO LENTO:
+   	 	for (int i = 0; i < enemigos.length; i++) {
+   	 	    if (enemigos[i] != null) {
+   	 	        if (enemigos[i].getArea().intersects(this.princesa.getArea())) {
+   	 	            this.princesa.perderVida();
+   	 	            enemigos[i] = null;
+   	 	            break; 
+   	 	        }
+   	 	        if(proyectil != null) {
+	   	 	        if (enemigos[i].getArea().intersects(this.proyectil.getArea())) {
+		 	            enemigos[i] = null;
+		 	            this.proyectil = null;
+		 	            break; 
+		 	        }
+   	 	        }
+   	 	    }
+   	 	}
+   	 	
+   		// PERDER VIDA SI CHOCA CON UN ENEMIGO RAPIDO:
+   	 	for (int i = 0; i < enemigosRapidos.length; i++) {
+   	 	    if (enemigosRapidos[i] != null) {
+   	 	        if (enemigosRapidos[i].getArea().intersects(this.princesa.getArea())) {
+   	 	            this.princesa.perderVida();
+   	 	            enemigosRapidos[i] = null;
+   	 	            break; 
+   	 	        }
+   	 	        if(proyectil != null) {
+	   	 	        if (enemigosRapidos[i].getArea().intersects(this.proyectil.getArea())) {
+		 	            enemigosRapidos[i] = null;
+		 	            this.proyectil = null;
+		 	            break; 
+		 	        }
+	 	        }
+   	 	    }
+   	 	}
+   	 	
+   	 	// PERDER VIDA SI CHOCA CON UN ENEMIGO TERRESTRE:
+   	 	for (int i = 0; i < enemigosRapidos.length; i++) {
+   	 	    if (enemigosTerrestres[i] != null) {
+   	 	        if (enemigosTerrestres[i].getArea().intersects(this.princesa.getArea())) {
+   	 	            this.princesa.perderVida();
+   	 	            enemigosTerrestres[i] = null;
+   	 	            break; 
+   	 	        }
+   	 	        if(proyectil != null) {
+	   	 	        if (enemigosTerrestres[i].getArea().intersects(this.proyectil.getArea())) {
+		 	            enemigosTerrestres[i] = null;
+		 	            this.proyectil = null;
+		 	            break; 
+		 	        }
+	 	        }
+   	 	    }
+   	 	}
 	 	
-       	izqPrincesa = this.princesa.getX() - 8;
-       	derPrincesa = this.princesa.getX() + 8;
-       	abajoPrincesa = nuevoY + 20;
-    	arribaPrincesa = nuevoY - 20;   	
-       	boolean debajoIsla = false;
-  
-       	//COLISION CON EL BORDE INFERIOR DE LA ISLA (TECHO)
-  
-     	if (princesa.getVelocidadY() < 0) {
-     	    for(int i=0 ; i < islas.length; i++ ) {
-     	    	
-     	        int bordeInferiorIsla = niveles[i] + 15; 
-     	        int bordeSuperiorIsla = niveles[i] - 15;
+		//CREAR EL PREYOCTIL
+		if (entorno.sePresionoBoton(entorno.BOTON_IZQUIERDO) && proyectil == null) {
+	
+			    proyectil = new Proyectil(princesa.getX(), princesa.getY(), entorno.mouseX() + camaraX, entorno.mouseY());
+			}
+	
+		if (proyectil != null) {
 
-     	        if (arribaPrincesa >= bordeInferiorIsla || abajoPrincesa <= bordeSuperiorIsla) { //SI LA PRINCESA ESTA COMPLETAMENTE POR ENCIMA O POR DEBAJO DE UNA ISLA, NO ESTA A NIVEL DE LAS ISLAS
-     	            continue;
-     	        }
-
-     	        int k = 0;
-     	        while(!debajoIsla && k < islas[i].length) {
-     	        	if(islas[i][k] != null) {
-	     	            int izqIsla = islas[i][k].getX() - islas[i][k].getAncho() / 2;
-	     	            int derIsla = islas[i][k].getX() + islas[i][k].getAncho() / 2;
-	     	            
-	     	            if(izqPrincesa <= derIsla && derPrincesa >= izqIsla) {
-	     	            	if(islas[i][k].isRompible()) {
-	     	                	islas[i][k] = null;
-	     	            	}
-	     	            		debajoIsla = true;
-	     	            		this.princesa.setVelocidadY(0);
-	     	            		nuevoY = niveles[i] + 15 + 20;
-	     	            }
-     	        	}
-     	            k++;
-     	        }
-     	        if(debajoIsla) break;
-     	    }
-     	}
-        
-     	abajoPrincesa = nuevoY + 20; 
-        arribaPrincesa = nuevoY - 20;
-     	
-       	//COLISION CON BORDE SUPERIOR DE ISLA (PISO)
-        if (princesa.getVelocidadY() >= 0) {
-            for(int i=0; i < niveles.length; i++ ) {
-      
-                int k = 0;
-                while(k < islas[i].length) { //!enIsla
-                	if(islas[i][k] != null){
-                		
-                		if(islas[i][k].isCaidaActiva() && entorno.numeroDeTick() >= islas[i][k].getTickCaida()) {
-                     		int columnaSiguiente = k;
-                     		int xSiguiente = islas[i][k].getX();
-                     		String direccionActual = islas[i][k].getDireccion();
-                     		
-                			if(direccionActual != null && direccionActual.equals("Derecha")) {
-                				columnaSiguiente += 1;
-                				xSiguiente += 40;
-                			}
-                			else {
-                				columnaSiguiente -= 1;
-                				xSiguiente -= 40;
-                			}
-                			
-                			if(columnaSiguiente >= 0 && columnaSiguiente < islas[i].length) {
-                				
-	                			if(islas[i][columnaSiguiente] != null && islas[i][columnaSiguiente].getX() == xSiguiente && islas[i][columnaSiguiente].isInestable()) {
-	                				islas[i][columnaSiguiente].setCaidaActiva(true);
-	                				islas[i][columnaSiguiente].setTickCaida(entorno.numeroDeTick() + 4);
-	                				islas[i][columnaSiguiente].setDireccion(direccionActual);
-	                			}
-                			}
-                			islas[i][k] = null;	
-                			k++;
-                			continue;
-                		}
-                		
-                     	int bordeSuperiorDeIsla = niveles[i] - 15;
-                        int bordeInferiorIsla = niveles[i] + 15;
-                        
-                        if (abajoPrincesa <= bordeSuperiorDeIsla || arribaPrincesa >= bordeInferiorIsla) {
-                        	k++;
-                            continue; 
-                        }
-                        
-	                    int izqIsla = islas[i][k].getX() - islas[i][k].getAncho() / 2;
-	                    int derIsla = islas[i][k].getX() + islas[i][k].getAncho() / 2;
-	                            
-	                    if(izqPrincesa <= derIsla && derPrincesa >= izqIsla) {
-	                    	if(!islas[i][k].isCaidaActiva() && islas[i][k].isInestable()) {
-	                            islas[i][k].setCaidaActiva(true);
-	                            islas[i][k].setTickCaida(entorno.numeroDeTick() + 20);
-	                            
-	                            if(princesa.getVelocidadX() >= 0) {
-	                                islas[i][k].setDireccion("Derecha");
-	                            } else {
-	                                islas[i][k].setDireccion("Izquierda");
-	                            }
-	                        }
-	                    	
-	                        this.princesa.setVelocidadY(0);
-	                        nuevoY = niveles[i] - 15 - 20; 
-	                        this.princesa.setTotalSaltos(0);
-	                    }
-                	}
-                    k++;
-                }   
-            }
-        }
-        
-        if(nuevoY <= 20) {
-        	nuevoY = 20;
-        	this.princesa.setVelocidadY(0);
-        }
-       	
-        princesa.setY(nuevoY);
-    
-        // PERDER VIDA SI CAE
-
-        if (this.princesa.getY() > 700) {
-
-            this.princesa.perderVida();
-
-            this.princesa.setX(400);
-            this.princesa.setY(300);
-
-            camaraX = 0;
-        }
-
-
-	 	   
+		    proyectil.mover();
+		    
+		    for(Bloques[] fila : bloques) {
+		    	for(Bloques columna : fila) {
+		    		if( columna != null) {
+			    		if(proyectil.getArea().intersects(columna.getArea())) {
+			    			proyectil = null;
+			    			break;
+			    		}
+		    		}
+		    	}
+		    	
+		    	if(proyectil == null) {
+	    			break;
+	    		}
+		    }
+		    
+		    
+		}
+   	 	
 	    
         // CAMARA QUE SIGUE
         
@@ -798,14 +880,20 @@ public class Juego extends InterfaceJuego
         // DIBUJAR ISLAS
         
 
-        for (Islas[] fila : islas) {
-        	for(Islas columna : fila) {
+        for (Bloques[] fila : bloques) {
+        	for(Bloques columna : fila) {
         		if(columna != null) {
-        			int x = columna.getX() - camaraX;
-        			columna.dibujar(entorno, x);
+        			int xCentro = columna.getX() + (columna.getAncho()/2) - camaraX;
+        			int yCentro = columna.getY() + (columna.getAlto()/2);
+        			
+        			columna.dibujar(entorno, xCentro, yCentro);
         		}
         	}
         }
+            
+        
+        
+        
         //DIBUJAR CASTILLO
         entorno.dibujarRectangulo(
         	    castilloX - camaraX,
@@ -830,31 +918,19 @@ public class Juego extends InterfaceJuego
         	);
     
 
-    
-	
-		//CREAR EL PREYOCTIL
-		if (entorno.sePresionoBoton(entorno.BOTON_IZQUIERDO) && proyectil == null) {
-	
-			    proyectil = new Proyectil(princesa.getX(), princesa.getY(), entorno.mouseX() + camaraX, entorno.mouseY());
-			}
-	
-		if (proyectil != null) {
-
-		    proyectil.mover();
-
-		    proyectil.dibujar(entorno, camaraX);
-
+       //DIBUJAR PROYECTIL
+        
+        if(proyectil != null){
+	        proyectil.dibujar(entorno, camaraX);
+		    
 		    if (proyectil.fueraDePantalla(camaraX)) {
-
+	
 		        proyectil = null;
 		    }
-		}
-	}
-
-	
-	
-	
-	
+        }
+		
+		
+	}	
 
 	
 	@SuppressWarnings("unused")
