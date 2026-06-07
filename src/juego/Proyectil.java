@@ -5,6 +5,9 @@ import java.awt.Rectangle;
 
 import entorno.Entorno;
 
+import java.awt.Image;
+import javax.swing.ImageIcon;
+
 public class Proyectil {
 
 	private Rectangle area;
@@ -13,6 +16,8 @@ public class Proyectil {
     private double vy;
 
     private int velocidad;
+    
+    private Image sprite;
 
     public Proyectil(int origenX,
                      int origenY,
@@ -20,7 +25,7 @@ public class Proyectil {
                      int destinoY) {
 
         this.area = new Rectangle(origenX, origenY, 10, 10);
-        this.velocidad = 4;
+        this.velocidad = 8;
 
         int dx = destinoX - origenX;
         int dy = destinoY - origenY;
@@ -30,6 +35,8 @@ public class Proyectil {
 
         this.vx = dx / distancia;
         this.vy = dy / distancia;
+        
+        sprite = new ImageIcon("src/proyectil.gif").getImage();
     }
 
     public void mover() {
@@ -39,18 +46,19 @@ public class Proyectil {
     }
 
     public void dibujar(Entorno entorno, int camaraX) {
-    	int xCentro = this.area.x + 5 - camaraX;
-    	int yCentro = this.area.y + 5;
+    		int xCentro =
+    	        this.area.x + this.area.width / 2 - camaraX;
 
-        entorno.dibujarRectangulo(
-            xCentro,
-            yCentro,
-            10,
-            10,
-            0,
-            Color.ORANGE
-        );
-    }
+    	    int yCentro =
+    	        this.area.y + this.area.height / 2;
+
+    	    entorno.dibujarImagen(
+    	        sprite,
+    	        xCentro,
+    	        yCentro,
+    	        0
+    	    );
+    	}
 
     public boolean fueraDePantalla(int camaraX) {
 

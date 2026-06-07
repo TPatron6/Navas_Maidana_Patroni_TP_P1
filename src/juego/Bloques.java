@@ -4,6 +4,9 @@ import java.awt.*;
 
 import entorno.Entorno;
 
+import java.awt.Image;
+import javax.swing.ImageIcon;
+
 public class Bloques {
 	
 	private Rectangle area;
@@ -12,7 +15,9 @@ public class Bloques {
 	private boolean caidaActiva;
 	private int tickCaida;
 	private String direccion;
-   
+	private static Image texturaNormal;
+	private static Image texturaRompible;
+	private static Image texturaInestable;
 
     public String getDireccion() {
 		return direccion;
@@ -27,7 +32,25 @@ public class Bloques {
     	this.rompible = esRompible;
     	this.inestable = esInestable;
     	this.caidaActiva = false;
-    }
+    	
+    	if (texturaNormal == null) {
+
+    	    texturaNormal =
+    	        new ImageIcon("src/bloqueNormal.png")
+    	        .getImage()
+    	        .getScaledInstance(ancho, alto, Image.SCALE_SMOOTH);
+
+    	    texturaRompible =
+    	        new ImageIcon("src/bloqueRompible.png")
+    	        .getImage()
+    	        .getScaledInstance(ancho, alto, Image.SCALE_SMOOTH);
+
+    	    texturaInestable =
+    	        new ImageIcon("src/bloqueInestable.png")
+    	        .getImage()
+    	        .getScaledInstance(ancho, alto, Image.SCALE_SMOOTH);
+    	}
+	}
 
     public boolean isCaidaActiva() {
 		return caidaActiva;
@@ -54,22 +77,35 @@ public class Bloques {
 	}
 
 	public void dibujar(Entorno entorno, int xCentro, int yCentro) {
-    	Color color = Color.GREEN;
-    	if(this.rompible) {
-    		color = Color.ORANGE;
-    	}
-    	if(this.inestable) {
-    		color = Color.PINK;
-    	}
-   	
-        entorno.dibujarRectangulo(
-                xCentro,
-                yCentro,
-                area.width,
-                area.height,
-                0,
-                color);
-    }
+		if (rompible) {
+
+	        entorno.dibujarImagen(
+	            texturaRompible,
+	            xCentro,
+	            yCentro,
+	            0
+	        );
+	    }
+	    else if (inestable) {
+
+	        entorno.dibujarImagen(
+	            texturaInestable,
+	            xCentro,
+	            yCentro,
+	            0
+	        );
+	    }
+	    else {
+
+	        entorno.dibujarImagen(
+	            texturaNormal,
+	            xCentro,
+	            yCentro,
+	            0
+	        );
+	    }
+	}
+	
 
     public int getX() {
         return area.x;

@@ -24,7 +24,7 @@ public class Princesa {
 		this.velocidadY = 0;
 	//	this.angulo = 0;
 		this.totalSaltos = 0;
-		this.vidas = 3;
+		this.vidas = 1000;
 
 		sprite = new ImageIcon("src/moverder.gif").getImage();
 		quieta = new ImageIcon("src/quieta.gif").getImage();
@@ -52,7 +52,7 @@ public class Princesa {
 		
 	public void saltar(Entorno entorno) {
 
-		if(entorno.sePresiono(entorno.TECLA_ESPACIO)) {
+		if(entorno.sePresiono(entorno.TECLA_ARRIBA)) {
 			if(this.totalSaltos == 1){
 				this.velocidadY = -12;
 				this.totalSaltos ++;

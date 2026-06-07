@@ -1,11 +1,14 @@
 package juego;
 
-import java.awt.Image;
+
 import java.awt.*;
 import java.util.Random;
 
 import entorno.Entorno;
 import entorno.InterfaceJuego;
+
+import java.awt.Image;
+import javax.swing.ImageIcon;
 
 
 public class Juego extends InterfaceJuego
@@ -30,6 +33,13 @@ public class Juego extends InterfaceJuego
 	private AereoRapido[] enemigosRapidos;
 	
 	private EnemigoTerrestre[] enemigosTerrestres;
+
+	//FONDO
+	private Image fondo;
+	
+	//CASTILLO
+	private Image castilloSprite;
+	private Rectangle areaCastillo;
 	
 	//JUGADOR
 	private Princesa princesa;
@@ -61,6 +71,18 @@ public class Juego extends InterfaceJuego
 		
 		// Inicializar lo que haga falta para el juego
 		// ...
+		
+		fondo = new ImageIcon("src/Mapa.png")
+		        .getImage()
+		        .getScaledInstance(
+		            entorno.ancho(),
+		            entorno.alto(),
+		            Image.SCALE_SMOOTH
+		        );
+		
+		castilloSprite = new ImageIcon("src/Castillo.png")
+		        .getImage()
+		        .getScaledInstance(120, 180, Image.SCALE_SMOOTH);
 		
 		this.enemigos = new AereoNormal[20];
 		this.enemigosRapidos = new AereoRapido[20];
@@ -377,9 +399,16 @@ public class Juego extends InterfaceJuego
 
 	                indiceEnemigo++;
 	            }
-	            this.castilloX = 8000;
+	            this.castilloX = 7000;
                 this.castilloY = 540;
                 this.victoria = false;
+                
+                areaCastillo = new Rectangle(
+                	    castilloX - 60,
+                	    castilloY - 180,
+                	    120,
+                	    180
+                	);
 	        }
 		}
 		
@@ -573,6 +602,7 @@ public class Juego extends InterfaceJuego
 	 * (ver el enunciado del TP para mayor detalle).
 	 */
 	public void tick() {
+		
 		if (victoria) {
 
 		    entorno.escribirTexto("¡GANASTE!", 320, 250);
@@ -616,6 +646,17 @@ public class Juego extends InterfaceJuego
 
 		    return;
 		}
+		
+		
+		// DIBUJAR EL FONDO
+        for (int i = 0; i < 10; i++) {
+            entorno.dibujarImagen(
+                fondo,
+                400 + i * 800 - camaraX,
+                300,
+                0
+            );
+        }
 		
 	    //GENERAR NORMALES
 
@@ -796,20 +837,25 @@ public class Juego extends InterfaceJuego
           	
            princesa.setY(nuevoY);
            
-        
-        // BLOQUES INESTABLES
+
+        // CONDICION DE VICTORIA
+           if (princesa.getArea().intersects(areaCastillo)) {
+        	    victoria = true;
+        	}
            
+        
+		//BLOQUES INESTABLES
         this.actualizarBloquesInestables();
          
         
         // PERDER VIDA SI CAE
 
-   	 	if (this.princesa.getY() > 700) {
+   	 	if (this.princesa.getY() > 600) {
 
    	 	   this.princesa.perderVida();
    	 	   this.princesa.setX(390);
    	 	   this.princesa.setY(280);
-
+   	 	   this.princesa.setVelocidadY(0);
 
    	 	    camaraX = 0;
    	 	}
@@ -887,6 +933,7 @@ public class Juego extends InterfaceJuego
             camaraX = 0;
         }
 
+     
         
         // DIBUJAR ISLAS
         
@@ -906,15 +953,12 @@ public class Juego extends InterfaceJuego
         
         
         //DIBUJAR CASTILLO
-        entorno.dibujarRectangulo(
+        entorno.dibujarImagen(
+        	    castilloSprite,
         	    castilloX - camaraX,
-        	    castilloY,
-        	    80,
-        	    120,
-        	    0,
-        	    Color.GRAY
+        	    niveles[0] - 90,
+        	    0
         	);
-        
         
 
         
@@ -922,6 +966,7 @@ public class Juego extends InterfaceJuego
        
         this.princesa.dibujarPrincesa(entorno, camaraX);
 
+        entorno.cambiarFont("Impact", 20, Color.RED);
         entorno.escribirTexto(
         	    "Vidas: " + princesa.getVidas(),
         	    30,
@@ -939,8 +984,6 @@ public class Juego extends InterfaceJuego
 		        proyectil = null;
 		    }
         }
-		
-		
 	}	
 
 	
