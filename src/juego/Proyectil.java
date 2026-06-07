@@ -65,4 +65,15 @@ public class Proyectil {
     public Rectangle getArea() {
     	return this.area;
     }
+    
+    public boolean colisionoConBloque(Bloques[][] bloques) {
+    	for(Bloques[] nivel : bloques) {
+	    	for(Bloques bloque : nivel) {
+	    		if( bloque != null && this.getArea().intersects(bloque.getArea())) {
+		    			return true;
+	    		}
+	    	}
+    	}
+    	return false;
+    }
 }
