@@ -5,11 +5,17 @@ import java.awt.Rectangle;
 
 import entorno.Entorno;
 
+import java.awt.Image;
+import javax.swing.ImageIcon;
+
 public class AereoNormal {
 
 	private Rectangle area;
     private double velocidad;
     private int direccion;
+    
+    private Image spriteDerecha;
+    private Image spriteIzquierda;
 
     public AereoNormal(int xInicial, int direccionInicial) {
 
@@ -20,6 +26,9 @@ public class AereoNormal {
         this.velocidad = 1;
         
         this.direccion = direccionInicial;
+        
+        spriteDerecha = new ImageIcon("src/aereoDerecha.gif").getImage();
+        spriteIzquierda = new ImageIcon("src/aereoIzquierda.gif").getImage();
     }
 
     
@@ -52,17 +61,27 @@ public class AereoNormal {
 
     public void dibujar(Entorno entorno, int camaraX) {
 
-    	int xCentro = this.area.x + 10 - camaraX;
-    	int yCentro = this.area.y + 10;
-    	
-        entorno.dibujarRectangulo(
-            xCentro,
-            yCentro,
-            20,
-            20,
-            0,
-            Color.MAGENTA
-        );
+    	int xCentro = this.area.x + this.area.width / 2 - camaraX;
+        int yCentro = this.area.y + this.area.height / 2;
+
+        if (direccion == 1) {
+
+            entorno.dibujarImagen(
+            		spriteIzquierda,
+                xCentro,
+                yCentro,
+                0
+            );
+
+        } else {
+
+            entorno.dibujarImagen(
+                spriteDerecha,
+                xCentro,
+                yCentro,
+                0
+            );
+        }
     }
 
     // limite para cuando sale de la pantalla
