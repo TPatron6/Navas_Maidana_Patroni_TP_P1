@@ -34,6 +34,16 @@ public class Juego extends InterfaceJuego
 	
 	private EnemigoTerrestre[] enemigosTerrestres;
 
+	
+	//BOTONES
+	private Image botonIniciar;
+	private Image botonSalir;
+	
+	//MENU
+	private Image fondoMenu;
+	private Image pantallaVictoria;
+	private Image pantallaDerrota;
+	
 	//FONDO
 	private Image fondo;
 	
@@ -86,6 +96,24 @@ public class Juego extends InterfaceJuego
 		            entorno.alto(),
 		            Image.SCALE_SMOOTH
 		        );
+		
+		fondoMenu = new ImageIcon("src/Inicio.png").getImage();
+		
+		pantallaVictoria = new ImageIcon("src/Victoria.png")
+		        .getImage()
+		        .getScaledInstance(800, 600, Image.SCALE_SMOOTH);
+		
+		pantallaDerrota = new ImageIcon("src/Derrota.png")
+		        .getImage()
+		        .getScaledInstance(800, 600, Image.SCALE_SMOOTH);
+		
+		
+		botonIniciar = new ImageIcon("src/Botinicio.png")
+		        .getImage()
+		        .getScaledInstance(250, 200, Image.SCALE_SMOOTH);
+		botonSalir = new ImageIcon("src/Botsalir.png")
+		        .getImage()
+		        .getScaledInstance(250, 200, Image.SCALE_SMOOTH);
 		
 		castilloSprite = new ImageIcon("src/Castillo.png")
 		        .getImage()
@@ -180,34 +208,26 @@ public class Juego extends InterfaceJuego
 		
 		public void dibujarMenu() {
 
-		    entorno.cambiarFont("Arial", 40, Color.WHITE);
-		    escribirTextoCentrado(
-		    	    "PRINCESA AVENTURA",
-		    	    400,
-		    	    150
-		    	);
+			entorno.dibujarImagen(
+			        fondoMenu,
+			        400,
+			        300,
+			        0
+			    );
 
-		    entorno.dibujarRectangulo(
-		        400, 250, 200, 50, 0, Color.GREEN
-		    );
-
-		    entorno.dibujarRectangulo(
-		        400, 350, 200, 50, 0, Color.RED
-		    );
-
-		    entorno.cambiarFont("Arial", 30, Color.BLACK);
-		    escribirTextoCentrado(
-		    	    "INICIAR",
-		    	    400,
-		    	    255
-		    	);
-
-		    entorno.cambiarFont("Arial", 30, Color.BLACK);
-		    escribirTextoCentrado(
-		    	    "SALIR",
-		    	    400,
-		    	    355
-		    	);
+			entorno.dibujarImagen(
+				    botonIniciar,
+				    400,
+				    250,
+				    0
+				);
+			
+			entorno.dibujarImagen(
+				    botonSalir,
+				    400,
+				    450,
+				    0
+				);
 		}
 		
 		
@@ -230,7 +250,7 @@ public class Juego extends InterfaceJuego
 		        // BOTON SALIR
 
 		        if (mx >= 300 && mx <= 500 &&
-		            my >= 325 && my <= 375) {
+		            my >= 325 && my <= 450) {
 
 		            System.exit(0);
 		        }
@@ -239,18 +259,13 @@ public class Juego extends InterfaceJuego
 		
 		public void dibujarGameOver() {
 
-		    entorno.escribirTexto(
-		        "GAME OVER",
-		        350,
-		        220
-		    );
-
-		    entorno.escribirTexto(
-		        "CLICK PARA REINTENTAR",
-		        320,
-		        320
-		    );
-		}
+			entorno.dibujarImagen(
+			        pantallaDerrota,
+			        400,
+			        300,
+			        0
+			    );
+			}
 
 		
 		public void reiniciarJuego() {
@@ -626,11 +641,12 @@ public class Juego extends InterfaceJuego
 		
 		if (victoria) {
 
-		    entorno.escribirTexto("¡GANASTE!", 320, 250);
-
-		    entorno.escribirTexto("LLEGASTE AL CASTILLO", 250, 320);
-
-		    entorno.escribirTexto("ESC = SALIR", 320, 380);
+		    entorno.dibujarImagen(
+		        pantallaVictoria,
+		        400,
+		        300,
+		        0
+		    );
 
 		    if (entorno.sePresiono(entorno.TECLA_ESCAPE)) {
 		        System.exit(0);
