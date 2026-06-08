@@ -56,6 +56,13 @@ public class Juego extends InterfaceJuego
   	private Bloques[][] bloques;
   	private int[] niveles = {570, 410, 270, 150};
   	
+  	//REGALO
+  	private Regalo regalo;
+  	
+    //RANDOM
+    Random random = new Random();
+
+
 	
 	//GRAVEDAD
 	private void gravedad(Princesa princesa) {
@@ -93,6 +100,7 @@ public class Juego extends InterfaceJuego
 		this.princesa = new Princesa();
 		 // cámara
         this.camaraX = 0;
+        
         
         generarMapa();
 	        
@@ -265,19 +273,17 @@ public class Juego extends InterfaceJuego
 		
 		public void generarMapa() {
 	        // ISLAS RANDOM
-	        
-	        Random random = new Random();
-
-	    	
-	        bloques = new Bloques[4][240];     //SUPONEMOS 30 ISLAS DE 8 BLOQUES CADA UNA POR NIVEL
+	
+	        bloques = new Bloques[4][176];     //SUPONEMOS 22 ISLAS DE 8 BLOQUES CADA UNA POR NIVEL
 	        
 	        int y;
 	        int x;
 	        int ancho = 40; 
 	        int alto = 30; 
 	        int cantBloquesPorIsla;
+	        int ultimoBloqueNivel0 = 0;
 	        int totalIslasPorNivel = 0;
-	    	int totalDeIslas2 = random.nextInt(6,11);
+	    	int totalDeIslas2 = random.nextInt(14,18);
 	    	int variacionDeBloque = 0;
 	    	boolean esRompible = false;
 	    	boolean esInestable = false;
@@ -289,20 +295,30 @@ public class Juego extends InterfaceJuego
 	        	cantBloquesPorIsla = 0;
 	        	
 	        	switch(fila) {
-	        	case 0 : totalIslasPorNivel = 30; break;
-	        	case 1 : totalIslasPorNivel = random.nextInt(12,19); break;
+	        	case 0 : totalIslasPorNivel = 22; break;
+	        	case 1 : totalIslasPorNivel = random.nextInt(17,20); break;
 	        	case 2 : totalIslasPorNivel = totalDeIslas2; break;
-	        	case 3 : totalIslasPorNivel = random.nextInt(2, totalDeIslas2 + 1); break;
+	        	case 3 : totalIslasPorNivel = random.nextInt(10, totalDeIslas2 + 1); break;
 	        	}
 	        	
 	        	int columna = 0;
 	        	while(totalIslasPorNivel > 0 || cantBloquesPorIsla >0){
-	        		if(cantBloquesPorIsla == 0) { //SI ES 0 HAY QUE INICIAR UNA NUEVA ISLA
-	        			cantBloquesPorIsla = random.nextInt(3,9);
+	        		
+	        		//INICIAR UNA NUEVA ISLA	
+	        		if(cantBloquesPorIsla == 0) {
+	        			
+	        			//CANTIDAD DE BLOQUES
+	        			cantBloquesPorIsla = random.nextInt(4,9);
 	        			totalIslasPorNivel --;
+	        			
+	        			if(fila == 0) {
+	        			ultimoBloqueNivel0 += cantBloquesPorIsla; 
+	        			}
+	        			
+	        			//DISTANCIA DE LA ULTIMA ISLA FORMADA
 	        			if(!primerIsla) {
 	        				if(fila == 0 || fila == 1) {
-	        					x += random.nextInt(80, 120); //DISTANCIA ENTRE ISLAS
+	        					x += random.nextInt(80, 120); 
 	        				}
 	        				else {
 	        					x += random.nextInt(160, 200);
@@ -311,10 +327,14 @@ public class Juego extends InterfaceJuego
 	        			else {
 	        				primerIsla = false;
 	        			}
+	        			
+	        			//TIPO DE BLOQUE
 	        			if(fila != 0) {
 	        				variacionDeBloque = random.nextInt(3);
 	        			}
 	        		}
+	        		
+	        		//GENERACION DE LOS BLOQUES POR ISLA Y ALMACENAMIENTO EN MATRIZ
 	        		if (variacionDeBloque == 2) {
 	        			esInestable = true;
 	        			esRompible = false;
@@ -327,6 +347,7 @@ public class Juego extends InterfaceJuego
 	        			esInestable = false;
 	        			esRompible = false;
 	        		}
+	        		
 	        		bloques[fila][columna] = new Bloques(x, y, ancho, alto, esRompible, esInestable);
 		       		columna ++;
 		       		cantBloquesPorIsla --;
@@ -364,9 +385,7 @@ public class Juego extends InterfaceJuego
 	                if(distancia > 40) {
 	                    inicioDeIsla = true;
 	                }
-	                this.castilloX = 2000;
-	                this.castilloY = 540;
-	                this.victoria = false;
+	   
 	            }
 
 	            if(inicioDeIsla) {
@@ -399,13 +418,15 @@ public class Juego extends InterfaceJuego
 
 	                indiceEnemigo++;
 	            }
-	            this.castilloX = 7000;
-                this.castilloY = 540;
+	            
+	            //CASTILLO
+	            this.castilloX = bloques[0][ultimoBloqueNivel0-1].getX() - 80;
+	            this.castilloY = niveles[0] - 180;
                 this.victoria = false;
                 
                 areaCastillo = new Rectangle(
-                	    castilloX - 60,
-                	    castilloY - 180,
+                	    castilloX,
+                	    castilloY,
                 	    120,
                 	    180
                 	);
@@ -660,11 +681,11 @@ public class Juego extends InterfaceJuego
 		
 	    //GENERAR NORMALES
 
-	    if (entorno.tiempo() > 3000
+	    if (entorno.tiempo() > 1000
 	        && contarEnemigos() < 10) {
 
 
-	        if (entorno.numeroDeTick() % 100 == 0) {
+	        if (entorno.numeroDeTick() % 80 == 0) {
 
 	            for (int i = 0; i < enemigos.length; i++) {
 
@@ -681,7 +702,7 @@ public class Juego extends InterfaceJuego
 
 	                	    //asi va de izquierda a derecha
 	                	    enemigos[i] =
-	                	        new AereoNormal(camaraX, 1);
+	                	        new AereoNormal(camaraX + 20, 1);
 	                	}
 
 	                    break;
@@ -695,7 +716,7 @@ public class Juego extends InterfaceJuego
 	    if (entorno.tiempo() > 20000
 	        && contarEnemigos() < 10) {
 
-	        if (entorno.numeroDeTick() % 150 == 0) {
+	        if (entorno.numeroDeTick() % 100 == 0) {
 
 	            for (int i = 0; i < enemigosRapidos.length; i++) {
 
@@ -709,7 +730,7 @@ public class Juego extends InterfaceJuego
 	                	} else {
 
 	                	    enemigosRapidos[i] =
-	                	        new AereoRapido(camaraX, 1);
+	                	        new AereoRapido(camaraX + 20, 1);
 	                	}
 
 	                    break;
@@ -856,6 +877,7 @@ public class Juego extends InterfaceJuego
    	 	   this.princesa.setX(390);
    	 	   this.princesa.setY(280);
    	 	   this.princesa.setVelocidadY(0);
+   	 	   this.regalo = null;
 
    	 	    camaraX = 0;
    	 	}
@@ -921,6 +943,34 @@ public class Juego extends InterfaceJuego
 		    	proyectil = null;
 		    }
 		}
+		
+		//ACTIVAR REGALO
+		if(regalo == null) {
+			int variacion = random.nextInt(600, 1001);
+			int tickActivacion = entorno.numeroDeTick() + variacion;
+			
+			int nivel = random.nextInt(4);
+			int regaloY = niveles[nivel] - 60;
+			regalo = new Regalo(0, regaloY, tickActivacion, false);
+		}
+		
+		
+		else {
+			if(!regalo.isActivo() && regalo.getTickAparicion() <= entorno.numeroDeTick()) {
+				int x = random.nextInt(100,701) + this.camaraX;
+				regalo.setX(x);
+				regalo.setActivo(true);
+			}
+			if(regalo.isActivo()) {
+				if(regalo.fueraDePantalla(camaraX)) {
+					regalo = null;
+				}
+				else if(princesa.getArea().intersects(regalo.getArea())) {
+					princesa.aumentarVida();
+					regalo = null;
+				}
+			}
+		}
    	 	
 	    
         // CAMARA QUE SIGUE
@@ -932,8 +982,12 @@ public class Juego extends InterfaceJuego
 
             camaraX = 0;
         }
+        
+        int limiteCamara = this.castilloX -630;
 
-     
+        if (camaraX > limiteCamara) {
+        	camaraX = limiteCamara;
+        }
         
         // DIBUJAR ISLAS
         
@@ -950,13 +1004,11 @@ public class Juego extends InterfaceJuego
         }
             
         
-        
-        
         //DIBUJAR CASTILLO
         entorno.dibujarImagen(
         	    castilloSprite,
-        	    castilloX - camaraX,
-        	    niveles[0] - 90,
+        	    castilloX + 60 - camaraX,
+        	    castilloY + 90,
         	    0
         	);
         
@@ -984,6 +1036,12 @@ public class Juego extends InterfaceJuego
 		        proyectil = null;
 		    }
         }
+        
+        //DIBUJAR REGALO
+         
+         if(regalo != null && regalo.getTickAparicion() <= entorno.numeroDeTick()) { 
+        	 regalo.dibujar(entorno, camaraX);
+         }
 	}	
 
 	

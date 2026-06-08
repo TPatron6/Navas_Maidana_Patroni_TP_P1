@@ -10,7 +10,6 @@ public class Princesa {
 	private Rectangle area;
 	private int velocidadY;
 	private int velocidadX;
-//	private double angulo;
 	private int totalSaltos;
 	private Image sprite;
 	private Image quieta;
@@ -65,6 +64,10 @@ public class Princesa {
 	}
 	public int getVidas() {
 	    return this.vidas;
+	}
+	
+	public void aumentarVida() {
+		this.vidas += 1;
 	}
 
 	public int getTotalSaltos() {

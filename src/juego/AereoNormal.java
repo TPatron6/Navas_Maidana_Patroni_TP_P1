@@ -88,7 +88,7 @@ public class AereoNormal {
 
     public boolean fueraDePantalla(int camaraX) {
 
-        return this.area.x < camaraX || this.area.x > camaraX + 800;
+        return this.area.x <= camaraX || this.area.x >= camaraX + 800;
     }
 
     // getters
