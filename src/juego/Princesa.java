@@ -23,7 +23,7 @@ public class Princesa {
 		this.velocidadY = 0;
 	//	this.angulo = 0;
 		this.totalSaltos = 0;
-		this.vidas = 100;
+		this.vidas = 3;
 
 		sprite = new ImageIcon("src/moverder.gif").getImage();
 		quieta = new ImageIcon("src/quieta.gif").getImage();

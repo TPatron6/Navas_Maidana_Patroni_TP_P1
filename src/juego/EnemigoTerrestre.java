@@ -4,6 +4,9 @@ import java.awt.Color;
 import java.awt.Rectangle;
 import entorno.Entorno;
 
+import java.awt.Image;
+import javax.swing.ImageIcon;
+
 public class EnemigoTerrestre {
    
     private Rectangle area;
@@ -15,6 +18,9 @@ public class EnemigoTerrestre {
     
     private int limiteIzquierdo;
     private int limiteDerecho;
+    
+    private Image spriteDerecha;
+    private Image spriteIzquierda;
 
     public EnemigoTerrestre(int x, int y, int limteIzquierdo, int limiteDerecho) {
     	this.area= new Rectangle(x, y, 20, 20);
@@ -27,6 +33,14 @@ public class EnemigoTerrestre {
         this.velocidad = 2;
 
         this.direccion = 1;
+        
+        spriteDerecha =
+        	    new ImageIcon("src/terrestreDer.png")
+        	        .getImage();
+
+        	spriteIzquierda =
+        	    new ImageIcon("src/terrestreIzq.png")
+        	        .getImage();
     }
 
     public void mover() {
@@ -52,18 +66,28 @@ public class EnemigoTerrestre {
     }
 
     public void dibujar(Entorno entorno, int camaraX) {
-    	
-    	int xCentro = this.area.x + 10 - camaraX;
-    	int yCentro = this.area.y + 10;
 
-        entorno.dibujarRectangulo(
-            xCentro,
-            yCentro,
-            20,
-            20,
-            0,
-            Color.RED
-        );
+        int xCentro = this.area.x + 10 - camaraX;
+        int yCentro = this.area.y + 10;
+
+        if (direccion == 1) {
+
+            entorno.dibujarImagen(
+                spriteDerecha,
+                xCentro,
+                yCentro,
+                0
+            );
+
+        } else {
+
+            entorno.dibujarImagen(
+                spriteIzquierda,
+                xCentro,
+                yCentro,
+                0
+            );
+        }
     }
     
     public void gravedad() {
